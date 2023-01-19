@@ -1,0 +1,482 @@
+import React, { useState, useEffect, createElement, Fragment } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import StudentRoute from "../../../components/routes/StudentRoute";
+import { Avatar } from "antd";
+import ReactPlayer from "react-player";
+import ReactMarkdown from "react-markdown";
+import {
+  PlayCircleOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from "@ant-design/icons";
+import { BackTop } from 'antd';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { MenuAlt1Icon, XIcon } from '@heroicons/react/outline'
+import { Button } from "@mui/material";
+import { Dialog } from '@headlessui/react'
+import {
+  BellIcon,
+  CalendarIcon,
+  ChartBarIcon,
+  FolderIcon,
+  HomeIcon,
+  InboxIcon,
+  MenuAlt2Icon,
+  UsersIcon,
+  CursorClickIcon
+} from '@heroicons/react/outline'
+import { SearchIcon } from '@heroicons/react/solid'
+
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+const { Item } = Menu;
+
+const style = {
+  height: 40,
+  width: 40,
+  lineHeight: '40px',
+  borderRadius: 4,
+  backgroundColor: '#1088e9',
+  color: '#fff',
+  textAlign: 'center',
+  fontSize: 14,
+};
+
+const people = [
+  { id: 1, name: 'Wade Cooper' },
+  { id: 2, name: 'Arlene Mccoy' },
+  { id: 3, name: 'Devon Webb' },
+  { id: 4, name: 'Tom Cook' },
+  { id: 5, name: 'Tanya Fox' },
+  { id: 6, name: 'Hellen Schmidt' },
+  { id: 7, name: 'Caroline Schultz' },
+  { id: 8, name: 'Mason Heaney' },
+  { id: 9, name: 'Claudie Smitham' },
+  { id: 10, name: 'Emil Schaefer' },
+]
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired
+};
+
+const navigation = [
+  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
+  { name: 'Team', href: '#', icon: UsersIcon, current: false },
+  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
+  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
+  { name: 'Report', href: '#', icon: ChartBarIcon, current: false },
+]
+
+const userNavigation = [
+  { name: 'Your Profile', href: '/user' },
+  { name: 'Home', href: '/' },
+]
+
+
+const SingleCourse = () => {
+ 
+  const [clicked, setClicked] = useState(-1);
+  const [collapsed, setCollapsed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [course, setCourse] = useState({ lessons: [] });
+  const [completedLessons, setCompletedLessons] = useState([]);
+  // force state update
+  const [updateState, setUpdateState] = useState(false);
+  const [open, setOpen] = React.useState(true);
+
+
+  // router
+  const router = useRouter();
+  const { slug } = router.query;
+
+  useEffect(() => {
+    if (slug) loadCourse();
+  }, [slug]);
+
+  useEffect(() => {
+    if (course) loadCompletedLessons();
+  }, [course]);
+
+  const loadCourse = async () => {
+    const { data } = await axios.get(`/api/user/course/${slug}`);
+    setCourse(data);
+  };
+
+  const loadCompletedLessons = async () => {
+    const { data } = await axios.post(`/api/list-completed`, {
+      courseId: course._id,
+    });
+    console.log("COMPLETED LESSONS => ", data);
+    setCompletedLessons(data);
+  };
+
+  const markCompleted = async () => {
+    const { data } = await axios.post(`/api/mark-completed`, {
+      courseId: course._id,
+      lessonId: course.lessons[clicked]._id,
+    });
+    console.log(data);
+    setCompletedLessons([...completedLessons, course.lessons[clicked]._id]);
+  };
+
+  const markIncompleted = async () => {
+    try {
+      const { data } = await axios.post(`/api/mark-incomplete`, {
+        courseId: course._id,
+        lessonId: course.lessons[clicked]._id,
+      });
+      console.log(data);
+      const all = completedLessons;
+      console.log("ALL => ", all);
+      const index = all.indexOf(course.lessons[clicked]._id);
+      if (index > -1) {
+        all.splice(index, 1);
+        console.log("ALL WITHOUT REMOVED => ", all);
+        setCompletedLessons(all);
+        setUpdateState(!updateState);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const [selected, setSelected] = useState(people[3])
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  return (
+    <StudentRoute>
+
+<div>
+        <Transition.Root show={sidebarOpen} as={Fragment}>
+          <Dialog as="div" className="fixed inset-0 flex z-40 md:hidden" onClose={setSidebarOpen}>
+            <Transition.Child
+              as={Fragment}
+              enter="transition-opacity ease-linear duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition-opacity ease-linear duration-300"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+            </Transition.Child>
+            <Transition.Child
+              as={Fragment}
+              enter="transition ease-in-out duration-300 transform"
+              enterFrom="-translate-x-full"
+              enterTo="translate-x-0"
+              leave="transition ease-in-out duration-300 transform"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
+            >
+              <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-in-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in-out duration-300"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="absolute top-0 right-0 -mr-12 pt-2">
+                    <button
+                      type="button"
+                      className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                      onClick={() => setSidebarOpen(false)}
+                    >
+                      <span className="sr-only">Close sidebar</span>
+                      <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                    </button>
+                  </div>
+                </Transition.Child>
+                <div className="flex-shrink-0 flex items-center px-4">
+                  <img
+                    className="h-8 w-auto"
+                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                    alt="Workflow"
+                  />
+                </div>
+                <div className="mt-5 flex-1 h-0 overflow-y-auto">
+                  <nav className="px-2 space-y-1">
+                  <div className="rounded-md border shadow-sm">
+            <h1 className="ml-3 mb-3 mt-3 lg:text-xl md:text-lg sm:text-lg font-semibold">
+                 Pages and Lessons
+                </h1>
+            </div>
+                <Box
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                    }}
+                    className="h-full"
+                  >
+                    <Tabs
+                      orientation="vertical"
+                      variant="scrollable"
+                      // value={value}
+                      // onChange={handleChange}
+                      aria-label="Pages tab"
+                    >
+                      <h1 className="opacity-0 select-none">
+                  10101010101010101010001010
+                </h1>
+                       {course.lessons.map((lesson, index) => (
+                  <button
+                  onClick={() => setClicked(index)}
+                  key={index}
+                    className={classNames(
+                      lesson.current ? 'bg-gray-100 text-gray-400' : 'rounded-lg text-gray-500 lg:text-lg hover:bg-gray-100 bg-gray-50 ml-5 mt-2 mb-2 hover:text-gray-900',
+                      'group flex items-center px-2 py-2 text-sm font-medium pt-1 pb-1 w-full '
+                    )}
+                  >
+                    {lesson.title.substring(0, 30)}
+                  </button>
+                ))}
+                    </Tabs>
+                  </Box>
+                  </nav>
+                </div>
+              </div>
+            </Transition.Child>
+            <div className="flex-shrink-0 w-14" aria-hidden="true">
+              {/* Dummy element to force sidebar to shrink to fit close icon */}
+            </div>
+          </Dialog>
+        </Transition.Root>
+
+        {/* Static sidebar for desktop */}
+        <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
+          {/* Sidebar component, swap this element with another sidebar if you like */}
+          <div className="flex flex-col flex-grow border-r border-gray-200 pt-5 bg-white overflow-y-auto">
+            <div className="flex items-center flex-shrink-0 px-4">
+              <img
+                className="h-8 w-auto"
+                src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                alt="Workflow"
+              />
+            </div>
+            <div className="mt-5 flex-grow flex flex-col">
+              <nav className="flex-1 px-2 pb-4 space-y-1">
+            <div className="rounded-md border shadow-sm">
+            <h1 className="ml-3 mb-3 mt-3 text-xl font-semibold">
+                 Pages and Lessons
+                </h1>
+            </div>
+                <Box
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                    }}
+                    className="h-full"
+                  >
+                    <Tabs
+                      orientation="vertical"
+                      variant="scrollable"
+                      // value={value}
+                      // onChange={handleChange}
+                      aria-label="Pages tab"
+                    >
+                      <h1 className="opacity-0 select-none">
+                  10101010101010101010001010
+                </h1>
+                       {course.lessons.map((lesson, index) => (
+                  <button
+                  onClick={() => setClicked(index)}
+                  key={index}
+                    className={classNames(
+                      lesson.current ? 'bg-gray-100 text-gray-400' : 'rounded-lg text-gray-500 lg:text-lg hover:bg-gray-100 bg-gray-50 ml-5 mt-2 mb-2 hover:text-gray-900',
+                      'group flex items-center px-2 py-2 text-sm font-medium pt-1 pb-1 w-full '
+                    )}
+                  >
+                    {lesson.title.substring(0, 30)}
+                  </button>
+                ))}
+                    </Tabs>
+                  </Box>
+
+               
+              </nav>
+            </div>
+          </div>
+        </div>
+        <div className="md:pl-64 flex flex-col flex-1">
+          <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
+            <button
+              type="button"
+              className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <span className="sr-only">Open sidebar</span>
+              <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
+            </button>
+            <div className="flex-1 px-4 flex justify-between">
+              <div className="flex-1 flex">
+                  <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+                    <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+                      {/* <SearchIcon className="h-5 w-5" aria-hidden="true" /> */}
+                    </div>
+                    <div
+                      className="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
+                    >
+                      <h1 className="text-center p-3 lg:text-lg md:text-md sm:text-md"> {course.name}</h1>
+                    </div>
+                  </div>
+              </div>
+              <div className="ml-4 flex items-center md:ml-6">
+                {/* <button
+                  type="button"
+                  className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <span className="sr-only">View notifications</span>
+                  <HomeIcon className="h-6 w-6" aria-hidden="true" />
+                </button> */}
+
+                {/* Profile dropdown */}
+                <Menu as="div" className="ml-3 relative">
+                  <div>
+                    <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      <span className="sr-only">Open user menu</span>
+                      <HomeIcon className="h-6 w-6 bg-white hover:bg-white hover:text-black" aria-hidden="true" />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      {userNavigation.map((item) => (
+                        <Menu.Item key={item.name}>
+                          {({ active }) => (
+                            <a
+                              href={item.href}
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700 hover:text-black'
+                              )}
+                            >
+                              {item.name}
+                            </a>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
+            </div>
+          </div>
+
+          <main className="flex-1">
+            <div className="py-6">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                <h1 className="text-2xl font-semibold text-gray-900">Book Page</h1>
+              </div>
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                {/* Replace with your content */}
+                <div className="py-4">
+                {clicked !== -1 ? (
+                      <>
+                        {course.lessons[clicked].video &&
+                          course.lessons[clicked].video.Location && (
+                            <>
+                              <div className="wrapper">
+                                <ReactPlayer
+                                  className="player"
+                                  url={course.lessons[clicked].video.Location}
+                                  width="100%"
+                                  height="100%"
+                                  controls
+                                  onEnded={() => markCompleted()}
+                                />
+                              </div>
+                            </>
+                          )}
+
+                        {/* <h3 className="mt-3 mb-3 font-bold text-lg">Lesson:</h3> */}
+                        <hr />
+                        <div className="scrolldiv w-full">
+                          <ReactMarkdown
+                            source={course.lessons[clicked].content}
+                            className="single-post mt-3 mb-3 font-sans text-xl antialiased font-normal"
+                          />
+                        </div>
+
+                        <BackTop>
+                          <div style={style}>
+                            <ArrowUpwardIcon />
+                          </div>
+                        </BackTop>
+                      </>
+                    ) : (
+                      <div className="d-flex justify-content-center p-5">
+                        <div className="text-left p-5">
+                          <p>
+                          <CursorClickIcon className="h-6 w-6 mt-2 mb-2" />
+                          Select a page to start reading
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  {/* <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" /> */}
+                </div>
+                {/* /End replace */}
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+     
+    </StudentRoute>
+  );
+};
+
+export default SingleCourse;

@@ -1,0 +1,174 @@
+ <div className="bg-stone-100">
+        <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
+          <div className='lg:col-span-8 col-span-1 p-5'>
+            <div className="product-info p-5">
+              <div className="product-des ">
+                {clicked !== -1 ? (
+                  <>
+                    <div className="mt-2 mb-2 square">
+                      <span className="text-2xl font-bold text-gray-800 mt-3 mb-3">{course.lessons[clicked].title.substring(0, 30)}</span>
+                      {completedLessons.includes(course.lessons[clicked]._id) ? (
+                        <>
+                          <Collapse in={open}>
+                            <Alert
+                              color="info"
+                              className="mt-3 mb-3"
+                              onClick={markIncompleted}
+                              iconMapping={{
+                                success: <CheckCircleRoundedIcon fontSize="inherit" />,
+                              }}
+                              action={
+                                <IconButton
+                                  aria-label="close"
+                                  color="inherit"
+                                  size="small"
+                                  onClick={() => {
+                                    setOpen(false);
+                                    { markIncompleted }
+                                  }}
+                                >
+                                  <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                              }
+                              sx={{}}
+                            >
+                              Congratulations you have completed: {course.lessons[clicked].title.substring(0, 30)}
+                            </Alert>
+                          </Collapse>
+                          <Button
+                            disabled={open}
+                            variant="outlined"
+                            onClick={() => {
+                              setOpen(true);
+                            }}
+                            className="mt-3 mb-3"
+                          >
+                            Undo Complete
+                          </Button>
+
+                          {/* <ClearIcon
+                    className="float-right pointer"
+                    color="action"
+                    onClick={markIncompleted}
+                  />
+                  <span>
+                    <Alert
+                  variant="filled"
+                  className="mt-2 mb-2"
+                  iconMapping={{
+                    success: <CheckCircleRoundedIcon fontSize="inherit" />,
+                  }}
+                >
+                  Congratulations you have completed: {course.lessons[clicked].title.substring(0, 30)}
+                </Alert>
+                    </span> */}
+                        </>
+                      ) : (
+
+                        <CheckCircleRoundedIcon color="success" className="float-right pointer" onClick={markCompleted} />
+                      )}
+
+
+                    </div>
+
+                    {course.lessons[clicked].video &&
+                      course.lessons[clicked].video.Location && (
+                        <>
+                          <div className="wrapper">
+                            <ReactPlayer
+                              className="player"
+                              url={course.lessons[clicked].video.Location}
+                              width="100%"
+                              height="100%"
+                              controls
+                              onEnded={() => markCompleted()}
+                            />
+                          </div>
+                        </>
+                      )}
+
+                    <h3 className="mt-3 mb-3 font-bold text-lg">Lesson:</h3>
+                    <hr />
+                    <div className="scrolldiv w-full">
+                    <ReactMarkdown
+                      source={course.lessons[clicked].content}
+                      className="single-post mt-3 mb-3 font-sans text-xl antialiased font-normal"
+                    />
+                    </div>
+                
+                    <BackTop>
+                      <div style={style}><ArrowUpwardIcon /></div>
+                    </BackTop>
+                  </>
+                ) : (
+                  <div className="d-flex justify-content-center p-5">
+                    <div className="text-center p-5">
+                      <PlayCircleOutlined className="text-primary display-1 p-5" />
+                      <p className="lead">Clcik on the pages to start reading</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className='lg:col-span-4 lg:sticky relative col-span-1 p-5'>
+            <div className='lg:sticky relative col-8'>
+          
+            {/* <form>
+          <input
+            type="email"
+            className="form-control mb-4 p-4"
+            placeholder="Enter Comment"
+            required
+          />
+
+          <button
+            type="submit"
+            className="btn btn-block btn-primary"
+          >
+            Add Comment
+          </button>
+        </form>
+         */}
+              <Accordion>
+             
+                <AccordionDetails>
+                  <Typography>
+                    <Button
+                      onClick={() => setCollapsed(!collapsed)}
+                      className="text-primary mt-1 btn-block mb-2 hidden"
+                    >
+                      {createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}{" "}
+                      {!collapsed && "Lessons"}
+                    </Button>
+                    <Menu
+                      defaultSelectedKeys={[clicked]}
+                      inlineCollapsed={collapsed}
+                      style={{ height: "80vh", overflow: "scroll" }}
+                    >
+                      {course.lessons.map((lesson, index) => (
+                        <Item
+                          onClick={() => setClicked(index)}
+                          key={index}
+                          icon={<Avatar>{index + 1}</Avatar>}
+                        >
+                          {lesson.title.substring(0, 30)}{" "}
+                          {completedLessons.includes(lesson._id) ? (
+                            <CheckCircleRoundedIcon color="success" className="float-right pointer m-2 " />
+                          ) : (
+                            <ClearIcon className="hidden-icon" />
+                          )}
+                        </Item>
+                      ))}
+                    </Menu>
+
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>

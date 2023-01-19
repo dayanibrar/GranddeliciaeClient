@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.square {
+  border-radius: 0px;
+}
+
+.jumbotron {
+  /* background-image: linear-gradient(to right, #007bff, #000); */
+  background-image: linear-gradient(to right, #22ffaa, #0fe35c);
+  color: rgb(255, 255, 255);
+}
+
+/* .jumbotron-box {
+ 
+} */
+
+.pointer {
+  cursor: pointer;
+}
+
+.hidden-icon {
+  opacity: 0%;
+  
+}
+
+.scrolldiv {
+  /* width: 110px;
+  height: 110px; */
+  overflow: auto;
+}
+
+* {
+  box-sizing: border box;
+}
+
+.btn:hover,
+button:hover {
+  background: #2a2a2a;
+  border-color: #2a2a2a;
+  color: #fff;
+}
+.btn-border {
+  background-color: transparent;
+  color: #1d1d1d;
+}
+.btn-arrow {
+  position: relative;
+  -webkit-transition: background-color 300ms ease-out;
+  transition: background-color 300ms ease-out;
+}
+.btn-arrow span {
+  display: inline-block;
+  position: relative;
+  -webkit-transition: all 300ms ease-out;
+  transition: all 300ms ease-out;
+  will-change: transform;
+}
+.btn-arrow:hover span {
+  -webkit-transform: translate3d(-1rem, 0, 0);
+          transform: translate3d(-1rem, 0, 0);
+}
+.btn-arrow .price {
+  position: absolute;
+  width: 1.1em;
+  right: 0px;
+  right: 0rem;
+  opacity: 0;
+  top: 0%;
+  -webkit-transform: translateY(0%);
+          transform: translateY(0%);
+  -webkit-transition: all 300ms ease-out;
+  transition: all 300ms ease-out;
+  will-change: right, opacity;
+}
+.btn-arrow .price * {
+  stroke-width: 5;
+  stroke-color: transparent;
+}
+.btn-arrow:hover .price {
+  opacity: 1;
+  right: -2rem;
+}
