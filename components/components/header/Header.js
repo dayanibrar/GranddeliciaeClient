@@ -1,5 +1,5 @@
 import React from 'react'
-
+import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
 const Header = () => {
 
   //     <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
@@ -44,7 +44,7 @@ const Header = () => {
                 The Grand Deliciae Resorts
               </span>
               <span className="mt-1 block text-3xl font-bold tracking-tight sm:text-5xl xl:text-4xl">
-                <span className="block text-white">Escape to Grand Deliciae: A luxurious getaway for the<span className="text-yellow-600"> senses</span></span>
+                <span className="block text-white">The Grand Deliciae: A luxurious getaway for the<span className="text-yellow-600"> senses</span></span>
               </span>
             </h1>
             <div className="mt-3 sm:mx-auto sm:max-w-lg sm:text-center lg:mx-0 lg:text-left">
@@ -54,13 +54,13 @@ const Header = () => {
           <div className="relative  sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-3 lg:flex lg:max-w-none lg:items-center">
             <div className="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md mt-2 mb-5 md:mb-5 alignment-margin-bottom">
              <div>
-             <h1 className='text-white text-base'>Sections</h1>
+             <h1 className='text-white text-base'>Get to know this Website<span className='mx-2 text-base'><ArrowOutwardRoundedIcon /></span></h1>
               <hr className='text-white border-t-2 border-white mt-2 mb-2 w-50' />
-              <h1 className='text-white text-base'>Sections</h1>
+              <h1 className='text-white text-base'>Learn the tech stack behind this website<span className='mx-2 text-base'><ArrowOutwardRoundedIcon /></span></h1>
               <hr className='text-white border-t-2 border-white mt-2 mb-2 w-50' />
-              <h1 className='text-white text-base'>Sections</h1>
+              <h1 className='text-white text-base'>Github Repository for client side<span className='mx-2 text-base'><ArrowOutwardRoundedIcon /></span></h1>
               <hr className='text-white border-t-2 border-white mt-2 mb-2 w-50' />
-              <h1 className='text-white text-base'>Sections</h1>
+              <h1 className='text-white text-base'>Github Repository for server side<span className='mx-2 text-base'><ArrowOutwardRoundedIcon /></span></h1>
              </div>
             </div>
           </div>

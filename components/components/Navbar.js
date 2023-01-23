@@ -4,7 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined";
-
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 const solutions = [
   {
     name: "Analytics",
@@ -73,9 +73,9 @@ export default function Example() {
             </a>
           </div>
           <div className="-my-2 -mr-2 md:hidden">
-            <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-white hover:bg-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset ">
+            <Popover.Button className="inline-flex items-center justify-center rounded-md bg-black p-2 text-white hover:bg-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset ">
               <span className="sr-only">Open menu</span>
-              <p>Bars Icon</p>
+             <MenuOutlinedIcon />
             </Popover.Button>
           </div>
 
@@ -423,7 +423,7 @@ export default function Example() {
           focus
           className="absolute inset-x-0 top-0 z-30 origin-top-right transform p-2 transition md:hidden"
         >
-          <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <div className="divide-y-2 divide-black border-black border-solid border rounded-lg bg-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="px-5 pt-5 pb-6 sm:pb-8">
               <div className="flex items-center justify-between">
                 <div>
@@ -434,7 +434,7 @@ export default function Example() {
                   />
                 </div>
                 <div className="-mr-2">
-                  <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-white hover:bg-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset ">
+                  <Popover.Button className="inline-flex items-center justify-center rounded-md bg-black p-2 text-white hover:bg-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset ">
                     <span className="sr-only">Close menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </Popover.Button>
@@ -449,7 +449,7 @@ export default function Example() {
                         href={item.href}
                         className="-m-3 flex items-center rounded-lg p-3 hover:bg-gray-50"
                       >
-                        <div className="ml-4 text-base font-medium text-gray-900">
+                        <div className="ml-4 text-base font-medium text-gray-50">
                           {item.name}
                         </div>
                       </a>
@@ -458,7 +458,7 @@ export default function Example() {
                   <div className="mt-8 text-base">
                     <a
                       href="#"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                      className="font-medium text-yellow-600 hover:text-yellow-500"
                     >
                       View all products
                       <span aria-hidden="true"> &rarr;</span>
@@ -471,37 +471,37 @@ export default function Example() {
               <div className="grid grid-cols-2 gap-4">
                 <a
                   href="#"
-                  className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700"
+                  className="rounded-md text-base font-medium text-gray-50 hover:text-gray-200"
                 >
                   Pricing
                 </a>
                 <a
                   href="#"
-                  className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700"
+                  className="rounded-md text-base font-medium text-gray-50 hover:text-gray-200"
                 >
                   Docs
                 </a>
                 <a
                   href="#"
-                  className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700"
+                  className="rounded-md text-base font-medium text-gray-50 hover:text-gray-200"
                 >
                   Company
                 </a>
                 <a
                   href="#"
-                  className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700"
+                  className="rounded-md text-base font-medium text-gray-50 hover:text-gray-200"
                 >
                   Resources
                 </a>
                 <a
                   href="#"
-                  className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700"
+                  className="rounded-md text-base font-medium text-gray-50 hover:text-gray-200"
                 >
                   Blog
                 </a>
                 <a
                   href="#"
-                  className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700"
+                  className="rounded-md text-base font-medium text-gray-50 hover:text-gray-200"
                 >
                   Contact Sales
                 </a>
@@ -509,13 +509,13 @@ export default function Example() {
               <div className="mt-6">
                 <a
                   href="#"
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-yellow-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-yellow-700"
                 >
                   Sign up
                 </a>
                 <p className="mt-6 text-center text-base font-medium text-white">
                   Existing customer?{" "}
-                  <a href="#" className="text-indigo-600 hover:text-indigo-500">
+                  <a href="#" className="text-yellow-600 hover:text-yellow-500">
                     Sign in
                   </a>
                 </p>

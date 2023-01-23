@@ -6,6 +6,8 @@ import { Context } from "../context";
 import NavbarMain from "../components/components/Navbar";
 import Header from "../components/components/header/Header";
 import MainDisplay from "../components/components/background/MainDisplay";
+import Feature from "../components/components/Feature.js/Feature";
+import OurRooms from "../components/components/Room/OurRooms";
 
 const Index = ({ course }) => {
   const [courses, setProducts] = useState([]);
@@ -41,9 +43,10 @@ const Index = ({ course }) => {
       <div className="bg-black">
         <NavbarMain />
         <Header />
-       <MainDisplay />
+        <MainDisplay />
+        <Feature />
+        <OurRooms/>
       </div>
-      
     </>
   );
 };
