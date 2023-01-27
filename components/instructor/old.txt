@@ -1,0 +1,47 @@
+import React from 'react';
+import { useContext, useEffect, useState } from "react";
+import { Context } from "../../context";
+import axios from "axios";
+import Link from 'next/link';
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
+import { Tooltip } from "antd";
+import { Modal, Button } from 'antd';
+
+const course = [
+  {
+    name: "Service One", href: "#", description: "this is des", image: "/images/bathroom.jpg",
+  }
+]
+
+const InstructorCard = () => {
+
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+      loadCourses();
+    }, []);
+  
+    const loadCourses = async () => {
+      const { data } = await axios.get("/api/instructor-courses");
+      setCourses(data);
+    };
+  
+    const myStyle = { marginTop: "-15px", fontSize: "10px" };
+
+    return (
+      <>
+       {course.map((item) => (
+                      <>
+                         <p>{item.name}</p>
+                         <img src={item.image} alt={item.name} />
+                      </>
+                        ))}
+
+      </>
+    );
+};
+
+
+export default InstructorCard;

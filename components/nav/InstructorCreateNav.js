@@ -1,16 +1,16 @@
 import { Fragment } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { SearchIcon } from '@heroicons/react/solid'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { BellIcon, XIcon } from '@heroicons/react/outline'
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import { Context } from "../../context";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { HomeIcon } from '@heroicons/react/solid';
 const { Item, SubMenu, ItemGroup } = Menu;
-
+import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Calendar', href: '#', current: false },

@@ -1,77 +1,91 @@
-import SingleCourse from "../../pages/books/[slug]";
+import SingleCourse from "../../pages/services/[slug]";
 import { currencyFormatter } from "../../utils/helpers";
-import { Badge, } from "antd";
+import { Badge } from "antd";
 import ReactPlayer from "react-player";
-import { LoadingOutlined, SafetyOutlined } from "@ant-design/icons";
-import { OfferComp } from "..";
-import { useState } from 'react'
-import { StarIcon } from '@heroicons/react/solid'
-import { RadioGroup } from '@headlessui/react'
-import Link from "next/link";
+import { SafetyOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { Menu, Transition } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import axios from "axios";
+import { Avatar, Tooltip, Button, Modal, List } from "antd";
+import {
+  EditOutlined,
+  CheckOutlined,
+  UploadOutlined,
+  QuestionOutlined,
+  CloseOutlined,
+  UserSwitchOutlined,
+} from "@ant-design/icons";
+import ReactMarkdown from "react-markdown";
+import { toast } from "react-toastify";
+import Item from "antd/lib/list/Item";
+import { RadioGroup,Disclosure, Tab } from "@headlessui/react";
+import { StarIcon } from "@heroicons/react/20/solid";
+import { HeartIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { Fragment } from "react";
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+
+
+
+const user = {
+  name: "Tom Cook",
+  email: "tom@example.com",
+  imageUrl:
+    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+};
+const navigation = [
+  { name: "Home", href: "/", current: false },
+  { name: "User Dashboard", href: "/user/", current: false },
+];
+const userNavigation = [
+  { name: "Your Profile", href: "#" },
+  { name: "Settings", href: "#" },
+  { name: "Sign out", href: "#" },
+];
+
 const product = {
-  name: 'Basic Tee 6-Pack',
-  price: '$192',
-  href: '#',
-  breadcrumbs: [
-    { id: 1, name: 'Home', href: '/' },
-    { id: 2, name: 'Books', href: 'browsebooks' },
-  ],
+  name: "Zip Tote Basket",
+  price: "$140",
+  rating: 4,
   images: [
     {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-      alt: 'Two each of gray, white, and black shirts laying flat.',
+      id: 1,
+      name: "Angled view",
+      src: "https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg",
+      alt: "Angled front view with bag zipped and handles upright.",
     },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-      alt: 'Model wearing plain black basic tee.',
-    },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-      alt: 'Model wearing plain gray basic tee.',
-    },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-      alt: 'Model wearing plain white basic tee.',
-    },
+    // More images...
   ],
   colors: [
-    { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-    { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-    { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
+    {
+      name: "Washed Black",
+      bgColor: "bg-gray-700",
+      selectedColor: "ring-gray-700",
+    },
+    { name: "White", bgColor: "bg-white", selectedColor: "ring-gray-400" },
+    {
+      name: "Washed Gray",
+      bgColor: "bg-gray-500",
+      selectedColor: "ring-gray-500",
+    },
   ],
-  sizes: [
-    { name: 'XXS', inStock: false },
-    { name: 'XS', inStock: true },
-    { name: 'S', inStock: true },
-    { name: 'M', inStock: true },
-    { name: 'L', inStock: true },
-    { name: 'XL', inStock: true },
-    { name: '2XL', inStock: true },
-    { name: '3XL', inStock: true },
+  description: `
+    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
+  `,
+  details: [
+    {
+      name: "Description and Content",
+    },
+    // More sections...
   ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
-    'Hand cut and sewn locally',
-    'Dyed with our proprietary colors',
-    'Pre-washed & pre-shrunk',
-    'Ultra-soft 100% cotton',
-  ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-}
-const reviews = { href: '#', average: 4, totalCount: 117 }
-const totaltime = { years: 2, days: 15, }
-
-const authenticity = {
-  version: 1,
-  sellername: "John B.Hanman",
-  reports: 0
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
+import Link from "next/link";
 
 
 const SingleCourseJumbotron = ({
@@ -98,279 +112,263 @@ const SingleCourseJumbotron = ({
     price,
     paid,
     category,
-    slug
+    slug,
   } = course;
-
-  const [selectedColor, setSelectedColor] = useState(product.colors[0])
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+  
 
   return (
     <>
-
-      <div className="">
-        <div className="container mx-auto px-10 mb-8 bg-gray-100 rounded-lg">
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-4 col-span-1">
-              <div className="mt-5">
-                <nav aria-label="Breadcrumb">
-                  {/* sm:px-6 lg:max-w-7xl lg:px-8 */}
-                  <ol role="list" className="max-w-2xl mx-auto flex items-center space-x-2 ">
-                    {product.breadcrumbs.map((breadcrumb) => (
-                      <li key={breadcrumb.id}>
-                        <div className="flex items-center">
-                          <a href={breadcrumb.href} className="mr-2 text-sm font-medium text-gray-900">
-                            {breadcrumb.name}
-                          </a>
-                          <svg
-                            width={16}
-                            height={20}
-                            viewBox="0 0 16 20"
-                            fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true"
-                            className="w-4 h-5 text-gray-300"
-                          >
-                            <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-                          </svg>
+    <div className="contianer-fluid">
+    <div className="min-h-full">
+        <div className="bg-black pb-32">
+          <Disclosure as="nav" className="bg-black">
+            {({ open }) => (
+              <>
+                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                  <div className="border-b border-neutral-800">
+                    <div className="flex h-16 items-center justify-between px-4 sm:px-0">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0">
+                          <img
+                            className="h-12 w-auto"
+                            src="/images/granddeliciaelog.png"
+                            alt="The Grand Deliciae"
+                          />
                         </div>
-                      </li>
-                    ))}
-                    <li className="text-sm w-100">
-                      <Link href={`/books/${slug}`} aria-current="page" className="font-sm w-100 text-gray-500 hover:text-gray-600">
-                        {name}
-                      </Link>
-                    </li>
-                  </ol>
-                </nav>
+                        <div className="hidden md:block">
+                          <div className="ml-10 flex items-baseline space-x-4">
+                            {navigation.map((item) => (
+                              <a
+                                key={item.name}
+                                href={item.href}
+                                className={classNames(
+                                  item.current
+                                    ? 'bg-neutral-900 text-white hover:text-white '
+                                    : 'text-gray-50 hover:bg-gray-700 hover:text-white',
+                                  'px-3 py-2 rounded-md text-sm font-medium'
+                                )}
+                                aria-current={item.current ? 'page' : undefined}
+                              >
+                                {item.name}
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="hidden md:block">
+                        <div className="ml-4 flex items-center md:ml-6">
+                          
 
-                {/* Image gallery */}
-                <div className="p-10">
-                  <div className="aspect-w-3 aspect-h-4 rounded-lg lg:block">
-                    <img
-                      src={image.Location}
-                      alt={name}
-                      className="w-full h-full object-center object-cover rounded-2xl shadow-md"
-                    />
+                          {/* Profile dropdown */}
+                         
+                        </div>
+                      </div>
+                      <div className="-mr-2 flex md:hidden">
+                        {/* Mobile menu button */}
+                        <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-black p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                          <span className="sr-only">Open main menu</span>
+                          {open ? (
+                            <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                          ) : (
+                            <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                          )}
+                        </Disclosure.Button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-            </div>
-            
-            <div className="lg:col-span-8 col-span-1">
-              <div className="lg:sticky relative col-8">
-              <div className="container mx-auto px-10 mb-8 bg-gray-100 rounded-lg">
-
-              <div className="max-w-2xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:pt-16 lg:pb-24 lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
-                  <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-                    <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{name}</h1>
-                  </div>
-
-                  {/* Options */}
-                  <div className="mt-4 lg:mt-0 lg:row-span-1">
-                    <h2 className="sr-only">Product information</h2>
-                    <p className="text-3xl text-gray-900">
-                      {paid
-                        ? currencyFormatter({
-                          amount: price,
-                          currency: "usd",
-                        })
-                        : "Free"}
-                    </p>
-
-                    <form className="mt-10">
-
-                      <button
-                        type="submit"
-                        className="mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        icon={<SafetyOutlined />}
-                        disabled={loading}
-                        onClick={paid ? handlePaidEnrollment : handleFreeEnrollment}
+                <Disclosure.Panel className="border-b border-neutral-900 md:hidden">
+                  <div className="space-y-1 px-2 py-3 sm:px-3">
+                    {navigation.map((item) => (
+                      <Disclosure.Button
+                        key={item.name}
+                        as="a"
+                        href={item.href}
+                        className={classNames(
+                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium'
+                        )}
+                        aria-current={item.current ? 'page' : undefined}
                       >
-                        {user ? enrolled.status ? "Go to Book" : "Purchase Book" : "Login to purchase"}
-                      </button>
-                    </form>
+                        {item.name}
+                      </Disclosure.Button>
+                    ))}
                   </div>
+                 
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
 
-                  <div className="py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-                    {/* Description and details */}
-                    <div>
-                      <h3 className="sr-only">Description</h3>
+          <header className="py-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <h1 className="text-3xl font-bold tracking-tight text-white">Experience unparalleled luxury at our 7-star resort</h1>
+            </div>
+          </header>
+        </div>
 
-                      <div className="space-y-6">
-                        {/* Add a base-description or excerpt function so that sellers can have a summarized description on top */}
-                        <p className="text-base text-gray-900">{description && description.substring(0, 250)}</p>
-                      </div>
-                    </div>
+        <main className="-mt-32">
+          <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+            {/* Replace with your content */}
+            <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+              <div className="h-126 rounded-lg border-4 border-dashed border-gray-200">
+              {course && (
+                    <div className="bg-white">
+                      <div className="mx-auto max-w-2xl px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+                        <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+                          {/* Image gallery */}
+                          <Tab.Group as="div" className="flex flex-col-reverse">
+                            {/* Image selector */}
 
-                    <div className="mt-10">
-                      {/* Add a high-lights function that goes shows an highlight of the book before buying. */}
-                      <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+                            <Tab.Panels className="aspect-w-1 aspect-h-1 w-full">
+                              <Tab.Panel>
+                                <img
+                                  src={
+                                    course.image
+                                      ? course.image.Location
+                                      : "/course.png"
+                                  }
+                                  alt={course.name}
+                                  className="h-full w-full object-cover object-center sm:rounded-lg"
+                                />
+                              </Tab.Panel>
+                            </Tab.Panels>
+                          </Tab.Group>
 
-                      <div className="mt-4">
-                        <ul role="list" className="pl-4 list-disc text-sm space-y-2">
-                          {product.highlights.map((highlight) => (
-                            <li key={highlight} className="text-gray-400">
-                              <span className="text-gray-600">{highlight}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+                          {/* Product info */}
+                          <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+                            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                             {name}
+                            </h1>
 
-                    {/* <div className="mt-10">
-                         Add a seller-details function that shows information about the seller
-                        <h2 className="text-sm font-medium text-gray-900">Details</h2>
+                            <div className="mt-2">
+                              <h2 className="sr-only">Product information</h2>
+                              <p className="text-3xl tracking-tight text-gray-900">
+                              {paid
+                          ? currencyFormatter({
+                              amount: price,
+                              currency: "usd",
+                            })
+                          : "Free"}
+                              </p>
+                            </div>
 
-                        <div className="mt-4 space-y-6">
-                            <p className="text-sm text-gray-600">{product.details}</p>
+                            <div className="mt-3">
+                              <h3 className="sr-only">Description</h3>
+                              <p className="font-bold font-lg mt-2 mb-2">
+                                {category} --{" "}
+                                Last udpated {new Date(updatedAt).toLocaleDateString()} --   {course &&
+                                              course.lessons &&
+                                              course.lessons.length}{" " + "Guides"} 
+                              </p>
+                              <hr />
+                              <p className="mt-2">
+                              {description && description.substring(0, 500)}
+                              </p>
+
+                            </div>
+
+                            <form className="mt-6">
+                              <div className="sm:flex-col1 mt-10 flex">
+
+                                <div className="row">
+                                  <Button
+                                     type="submit"
+                                    className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-yellow-600 hover:border-yellow-600 hover:text-white py-3 px-8 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
+                                    size="large"
+                                    disabled={loading}
+                                    onClick={
+                                      paid ? handlePaidEnrollment : handleFreeEnrollment
+                                    }
+                                  >
+                                    {user
+                            ? enrolled.status
+                              ? "Go to your booking"
+                              : "Book Now"
+                            : "Login to Book"}
+                                  </Button>
+                                </div>
+
+                              </div>
+                            </form>
+                          </div>
                         </div>
-                    </div> */}
-                  </div>
-                </div>
+                        <section
+                          aria-labelledby="details-heading"
+                          className="mt-12"
+                        >
+                          <h2 id="details-heading" className="sr-only">
+                            Additional details
+                          </h2>
 
-              </div>
-               
-
+                          <div className="divide-y divide-gray-200 border-t mt-5">
+                            {product.details.map((detail) => (
+                              <Disclosure as="div" key={detail.name}>
+                                {({ open }) => (
+                                  <>
+                                    <h3>
+                                      <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
+                                        <span
+                                          className={classNames(
+                                            open
+                                              ? "text-yellow-600 font-bold text-lg"
+                                              : "text-gray-900",
+                                            "text-lg font-medium"
+                                          )}
+                                        >
+                                          {detail.name}
+                                        </span>
+                                        <span className="ml-6 flex items-center">
+                                          {open ? (
+                                            <MinusIcon
+                                              className="block h-6 w-6 text-yellow-400 group-hover:text-yellow-500"
+                                              aria-hidden="true"
+                                            />
+                                          ) : (
+                                            <PlusIcon
+                                              className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                                              aria-hidden="true"
+                                            />
+                                          )}
+                                        </span>
+                                      </Disclosure.Button>
+                                    </h3>
+                                    <Disclosure.Panel
+                                      as="div"
+                                      className="prose prose-sm pb-6"
+                                    >
+                                      <p>
+                                        <ul>
+                                          <div
+                                            className="space-y-6 text-base text-gray-700"
+                                            dangerouslySetInnerHTML={{
+                                              __html: course.description,
+                                            }}
+                                          />
+                                        </ul>
+                                       
+                                      </p>
+                                    </Disclosure.Panel>
+                                  </>
+                                )}
+                              </Disclosure>
+                            ))}
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  
+                  )}
               </div>
             </div>
+            {/* /End replace */}
           </div>
-        </div>
-
-
-        <div className="container mx-auto px-10 mb-8 bg-gray-100 rounded-lg">
-
-          <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
-            <div className='lg:col-span-12 col-span-1'>
-              <div className="product-info p-5">
-                <div className="product-des">
-                  <h1 className="font-medium text-2xl mb-3">Product Description</h1>
-                  {description && description}
-                  <hr className="mt-5 mb-5" />
-                  <Badge
-                    count={category}
-                    style={{ backgroundColor: "#C4C4C4" }}
-                    className="pb-4 mr-2"
-                  />
-                </div>
-                <p>Last udpated {new Date(updatedAt).toLocaleDateString()}</p>
-                <p className="text-sm text-grey block mt-6 font-bold">Created by {course.instructor.name}</p>
-
-                <div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="container mx-auto mb-8 rounded-lg">
-
-          <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
-
-            <div className='lg:col-span-4 bg-gray-100 col-span-1 rounded-lg'>
-              <div className="product-info p-5 rounded-lg">
-                <div className="product-des">
-                  <h1 className="font-medium text-2xl mb-3">Authenticity</h1>
-                  {/* Add the Authenticity function */}
-                  {/* {description && description} */}
-                  <p>This product is a seller's {authenticity.version} copy being sold by a third party seller.
-                    Originally created by &quot;{authenticity.sellername}&quot;. If you are looking for a
-                    1st copy product/version browse over to Search Authenticity page.
-                    <br />
-                    <hr className="mt-2 mb-3" />
-                    <span className="mt-3 mb-2">
-                      <b>Reports for this product:</b> {authenticity.reports}
-                    </span>
-                  </p>
-                  <hr className="mt-5 mb-5" />
-                  <h3>License: Approved</h3>
-                </div>
-                <p className="text-stone-400">Contact Xidas Academy copy-right and seller service if anything is wrong.</p>
-
-                <div>
-                  <br />
-                  <br />
-                  <br />
-
-                  <button
-                    type="submit"
-                    className="mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Submit a report
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className='lg:col-span-4 bg-gray-100 col-span-1 rounded-lg'>
-              <div className="product-info p-5">
-                <div className="product-des">
-                  <h1 className="font-medium text-2xl mb-3">Seller Information</h1>
-                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting indssustry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                  <hr className="mt-5 mb-5" />
-                  <h3 className="mb-3 mt-3">
-                    <Badge
-                      count={totaltime.years}
-                      style={{ backgroundColor: "#C4C4C4" }}
-                      className="mr-2"
-                    />
-                    <span>
-                      Year on Book Base
-                    </span>
-                  </h3>
-
-                </div>
-                <p>Seller's Contact Information:</p>
-                <p className="text-sm text-grey block mt-6 font-bold">Email: Johndoe@xidasstudios.com</p>
-                <div>
-                  <br />
-
-                  <button
-                    type="submit"
-                    className="mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Contact Seller
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className='lg:col-span-4 bg-gray-100 col-span-1 rounded-lg'>
-              <div className="product-info p-5">
-                <div className="product-des">
-                  <h1 className="font-medium text-2xl mb-3">Check Comment by Xidas Academy</h1>
-                  <p>This book has been verified and checked throughly for all it's updates. If you find an error, copyright issue,
-                    or anything that is wrong with the book while reading, before buying etc, submit a check-report witht the issue.
-                  </p>
-                  <hr className="mt-5 mb-5" />
-                  <Badge
-                    count={7}
-                    style={{ backgroundColor: "#C4C4C4" }}
-                    className="pb-4 mr-2"
-                  />
-                </div>
-                <p>Last checked {new Date(updatedAt).toLocaleDateString()}</p>
-                <p className="text-sm text-grey block mt-6 font-bold">Checked by <span>Sarah Lee</span></p>
-
-                <div>
-                  <button
-                    type="submit"
-                    className="mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Submit a report
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
+        </main>
       </div>
-
+    </div>
+      
     </>
-
   );
 };
 

@@ -26,6 +26,7 @@ const InstructorCard = () => {
 
     return (
       <>
+      <h1>Dashcomponent</h1>
         {courses &&
           courses.map((course) => (
             <>

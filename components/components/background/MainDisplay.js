@@ -22,7 +22,7 @@ const MainDisplay = () => {
                     <span className="block text-yellow-50 text-base font-medium tracking-tight sm:text-base lg:text-base">Spring bookings are open now </span>
                   </h1>
                   <p className="mx-auto mt-6 max-w-lg text-center text-xl text-yellow-50 sm:max-w-3xl">
-                  Our Resorts offers guests an unparalleled and indulgent experience, with impeccable service, and luxurious amenities. Avaliable throughout the state of Virginia.
+                  Our Resorts offers guests an unparalleled and indulgent experience, with impeccable service, and luxurious amenities. Avaliable all across the United States of America.
                   </p>
                   <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                     <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">

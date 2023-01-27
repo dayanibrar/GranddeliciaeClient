@@ -6,6 +6,25 @@ import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { Context } from "../../context";
 import { useRouter } from "next/router";
+import { Bars3Icon, EnvelopeIcon, PhoneIcon, XMarkIcon } from '@heroicons/react/24/outline'
+
+const offices = [
+  { id: 1, city: 'Los Angeles', address: ['4556 Brendan Ferry', 'Los Angeles, CA 90210'] },
+  { id: 2, city: 'New York', address: ['886 Walter Streets', 'New York, NY 12345'] },
+  { id: 3, city: 'Washington', address: ['7363 Cynthia Pass', 'Washington DC, N3Y 4H8'] },
+  { id: 4, city: 'Richmond', address: ['114 Cobble Lane', 'Richmond N1 2EF'] },
+]
+
+const tabs = [
+  { name: 'Register', href: '/register', current: true },
+  { name: 'Home page', href: '/', current: false },
+  { name: 'Login', href: '/login', current: false },
+  { name: 'Privacy Policy', href: '/security/privacypolicy', current: false },
+]
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
 
 const register = () => {
   const [name, setName] = useState("");
@@ -38,7 +57,7 @@ const register = () => {
         password,
       });
       // console.log("REGISTER RESPONSE", data);
-      toast("Registration successful. Please login.");
+      toast.warning("Registration successful. Please login.");
       setFirstName("");
       setLastName("");
       setName("");
@@ -55,18 +74,360 @@ const register = () => {
   return (
     <>
 
-<div className="min-h-full flex">
+<main className="overflow-hidden">
+        {/* Header */}
+        <div className="bg-warm-gray-50">
+          <div className="py-24 lg:py-32">
+            <div className="relative z-10 mx-auto max-w-7xl pl-4 pr-8 sm:px-6 lg:px-8">
+              <h1 className="text-4xl font-bold tracking-tight text-warm-gray-900 sm:text-5xl lg:text-6xl">
+               Sign up for the Grand Deliciae Resorts
+              </h1>
+              <p className="mt-6 max-w-3xl text-xl text-warm-gray-500">
+              Sign up for an account at the Grand Deliciae and enjoy exclusive access to our booking system, special offers, and personalized service.
+              </p>
+              
+              
+              <div className="border-b border-gray-200 pb-5 sm:pb-0 mt-12">
+      <h3 className="text-lg font-medium leading-6 text-gray-900">Quick Navigation</h3>
+      <div className="mt-3 sm:mt-4">
+        <div className="sm:hidden">
+          <label htmlFor="current-tab" className="sr-only">
+            Select a tab
+          </label>
+          <select
+            id="current-tab"
+            name="current-tab"
+            className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-yellow-500 focus:outline-none focus:ring-yellow-500 sm:text-sm"
+            defaultValue={tabs.find((tab) => tab.current).name}
+          >
+            {tabs.map((tab) => (
+              <option key={tab.name}>{tab.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="hidden sm:block">
+          <nav className="-mb-px flex space-x-8">
+            {tabs.map((tab) => (
+              <a
+                key={tab.name}
+                href={tab.href}
+                className={classNames(
+                  tab.current
+                    ? 'border-yellow-500 text-yellow-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                  'whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm'
+                )}
+                aria-current={tab.current ? 'page' : undefined}
+              >
+                {tab.name}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </div>
+    </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* Contact section */}
+        <section className="relative bg-white" aria-labelledby="contact-heading">
+          <div className="absolute h-1/2 w-full bg-warm-gray-50" aria-hidden="true" />
+          {/* Decorative dot pattern */}
+          <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+            <svg
+              className="absolute top-0 right-0 z-0 -translate-y-16 translate-x-1/2 transform sm:translate-x-1/4 md:-translate-y-24 lg:-translate-y-72"
+              width={404}
+              height={384}
+              fill="none"
+              viewBox="0 0 404 384"
+              aria-hidden="true"
+            >
+              <defs>
+                <pattern
+                  id="64e643ad-2176-4f86-b3d7-f2c5da3b6a6d"
+                  x={0}
+                  y={0}
+                  width={20}
+                  height={20}
+                  patternUnits="userSpaceOnUse"
+                >
+                  <rect x={0} y={0} width={4} height={4} className="text-warm-gray-200" fill="currentColor" />
+                </pattern>
+              </defs>
+              <rect width={404} height={384} fill="url(#64e643ad-2176-4f86-b3d7-f2c5da3b6a6d)" />
+            </svg>
+          </div>
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="relative bg-white shadow-xl">
+              <h2 id="contact-heading" className="sr-only">
+                Contact us
+              </h2>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3">
+                {/* Contact information */}
+                <div className="relative overflow-hidden bg-gradient-to-b from-yellow-500 to-yellow-600 py-10 px-6 sm:px-10 xl:p-12">
+                  {/* Decorative angle backgrounds */}
+                  <div className="pointer-events-none absolute inset-0 sm:hidden" aria-hidden="true">
+                    <svg
+                      className="absolute inset-0 h-full w-full"
+                      width={343}
+                      height={388}
+                      viewBox="0 0 343 388"
+                      fill="none"
+                      preserveAspectRatio="xMidYMid slice"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M-99 461.107L608.107-246l707.103 707.107-707.103 707.103L-99 461.107z"
+                        fill="url(#linear1)"
+                        fillOpacity=".1"
+                      />
+                      <defs>
+                        <linearGradient
+                          id="linear1"
+                          x1="254.553"
+                          y1="107.554"
+                          x2="961.66"
+                          y2="814.66"
+                          gradientUnits="userSpaceOnUse"
+                        >
+                          <stop stopColor="#fff" />
+                          <stop offset={1} stopColor="#fff" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  <div
+                    className="pointer-events-none absolute top-0 right-0 bottom-0 hidden w-1/2 sm:block lg:hidden"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      className="absolute inset-0 h-full w-full"
+                      width={359}
+                      height={339}
+                      viewBox="0 0 359 339"
+                      fill="none"
+                      preserveAspectRatio="xMidYMid slice"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M-161 382.107L546.107-325l707.103 707.107-707.103 707.103L-161 382.107z"
+                        fill="url(#linear2)"
+                        fillOpacity=".1"
+                      />
+                      <defs>
+                        <linearGradient
+                          id="linear2"
+                          x1="192.553"
+                          y1="28.553"
+                          x2="899.66"
+                          y2="735.66"
+                          gradientUnits="userSpaceOnUse"
+                        >
+                          <stop stopColor="#fff" />
+                          <stop offset={1} stopColor="#fff" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  <div
+                    className="pointer-events-none absolute top-0 right-0 bottom-0 hidden w-1/2 lg:block"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      className="absolute inset-0 h-full w-full"
+                      width={160}
+                      height={678}
+                      viewBox="0 0 160 678"
+                      fill="none"
+                      preserveAspectRatio="xMidYMid slice"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M-161 679.107L546.107-28l707.103 707.107-707.103 707.103L-161 679.107z"
+                        fill="url(#linear3)"
+                        fillOpacity=".1"
+                      />
+                      <defs>
+                        <linearGradient
+                          id="linear3"
+                          x1="192.553"
+                          y1="325.553"
+                          x2="899.66"
+                          y2="1032.66"
+                          gradientUnits="userSpaceOnUse"
+                        >
+                          <stop stopColor="#fff" />
+                          <stop offset={1} stopColor="#fff" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-white">Create an account for free and recieve $100 in bonus</h3>
+                  <p className="mt-6 max-w-3xl text-base text-teal-50">
+                  Creating an account at the Grand Deliciae is easy and secure, simply provide your personal information and start planning your luxurious stay with us today.
+                  </p>
+                  <dl className="mt-8 space-y-6">
+                    <dt>
+                      <span className="sr-only">Phone number</span>
+                    </dt>
+                    <dd className="flex text-base text-teal-50">
+                      <PhoneIcon className="h-6 w-6 flex-shrink-0 text-yellow-50" aria-hidden="true" />
+                      <span className="ml-3">+1 (555) 123-4567</span>
+                    </dd>
+                    <dt>
+                      <span className="sr-only">Email</span>
+                    </dt>
+                    <dd className="flex text-base text-teal-50">
+                      <EnvelopeIcon className="h-6 w-6 flex-shrink-0 text-yellow-50" aria-hidden="true" />
+                      <span className="ml-3">support@thegranddeliciae.com</span>
+                    </dd>
+                  </dl>
+                </div>
+
+                {/* Contact form */}
+                <div className="py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
+                  <h3 className="text-lg font-medium text-warm-gray-900">Become a part of The Grand Deliciae</h3>
+                  <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
+                    <div>
+                      <label htmlFor="first-name" className="block text-sm font-medium text-warm-gray-900">
+                        First name
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          name="firstname"
+                          type="text"
+                          autoComplete="firstname"
+                          required
+                          value={firstname}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          className="block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-yellow-500 focus:ring-yellow-500"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="last-name" className="block text-sm font-medium text-warm-gray-900">
+                        Last name
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          name="lastname"
+                          type="text"
+                          autoComplete="lastname"
+                          required
+                          value={lastname}
+                          onChange={(e) => setLastName(e.target.value)}
+                          className="block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-yellow-500 focus:ring-yellow-500"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="last-name" className="block text-sm font-medium text-warm-gray-900">
+                        Full Name
+                      </label>
+                      <div className="mt-1">
+                        <input
+                                               name="fullname"
+                                               type="text"
+                                               autoComplete="fullname"
+                                               required
+                                               value={name}
+                                               onChange={(e) => setName(e.target.value)}
+                          className="block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-yellow-500 focus:ring-yellow-500"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-warm-gray-900">
+                        Email
+                      </label>
+                      <div className="mt-1">
+                        <input
+                       id="email"
+                       name="email"
+                       type="email"
+                       autoComplete="email"
+                       required
+                       value={email}
+                       onChange={(e) => setEmail(e.target.value)}
+                          className="block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-yellow-500 focus:ring-yellow-500"
+                        />
+                      </div>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label htmlFor="subject" className="block text-sm font-medium text-warm-gray-900">
+                        Password
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          id="password"
+                          name="password"
+                          type="password"
+                          autoComplete="current-password"
+                          required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-yellow-500 focus:ring-yellow-500"
+                        />
+                      </div>
+                    </div>
+                    <div className="sm:col-span-2 sm:flex sm:justify-end">
+                      <button
+                        type="submit"
+                        disabled={!name || !firstname || !lastname || !email || !password || loading}
+                        className="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-yellow-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 sm:w-auto"
+                      >
+                         {loading ? <SyncOutlined spin /> : "Create my account"}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact grid */}
+        <section aria-labelledby="offices-heading">
+          <div className="mx-auto max-w-7xl py-24 px-6 sm:py-32 lg:px-8">
+            <h2 id="offices-heading" className="text-3xl font-bold tracking-tight text-warm-gray-900">
+              Our Resorts
+            </h2>
+            <p className="mt-6 max-w-3xl text-lg text-warm-gray-500">
+            Start planning your luxurious stay with us today at the grand deliciae.
+            </p>
+            <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+              {offices.map((office) => (
+                <div key={office.id}>
+                  <h3 className="text-lg font-medium text-warm-gray-900">{office.city}</h3>
+                  <p className="mt-2 text-base text-warm-gray-500">
+                    {office.address.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* <div className="min-h-full flex bg-neutral-900">
         <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
               <img
                 className="h-12 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                alt="Workflow"
+                src="/images/granddeliciaelog.png"
+                alt="The Grand Deliciae"
               />
               <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
               <p className="mt-2 text-sm text-gray-600">
-                
+
                 <a href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
                   Click here, if you already have an account
                 </a>
@@ -75,55 +436,6 @@ const register = () => {
 
             <div className="mt-8">
               <div>
-                <div>
-                  {/* <p className="text-sm font-medium text-gray-700">Create a new account</p> */}
-
-                  {/* <div className="mt-1 grid grid-cols-3 gap-3">
-                    <div>
-                      <a
-                        href="#"
-                        className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                      >
-                        <span className="sr-only">Sign in with Facebook</span>
-                        <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </a>
-                    </div>
-
-                    <div>
-                      <a
-                        href="#"
-                        className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                      >
-                        <span className="sr-only">Sign in with Twitter</span>
-                        <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
-                        </svg>
-                      </a>
-                    </div>
-
-                    <div>
-                      <a
-                        href="#"
-                        className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                      >
-                        <span className="sr-only">Sign in with GitHub</span>
-                        <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </a>
-                    </div>
-                  </div> */}
-                </div>
 
                 <div className="mt-6 relative">
                   <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -138,7 +450,7 @@ const register = () => {
               <div className="mt-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
 
-                <div>
+                  <div>
                     <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">
                       First name
                     </label>
@@ -221,35 +533,15 @@ const register = () => {
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
                       />
                     </div>
                   </div>
 
-                  {/* <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <input
-                        id="remember-me"
-                        name="remember-me"
-                        type="checkbox"
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                      />
-                      <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                        Remember me
-                      </label>
-                    </div>
-
-                    <div className="text-sm">
-                      <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                        Forgot your password?
-                      </a>
-                    </div>
-                  </div> */}
-
                   <div>
                     <button
                       type="submit"
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
                       disabled={!name || !firstname || !lastname || !email || !password || loading}
                     >
                       {loading ? <SyncOutlined spin /> : "Create my account"}
@@ -261,66 +553,14 @@ const register = () => {
           </div>
         </div>
         <div className="hidden lg:block relative w-0 flex-1">
-          <img
-            className="absolute inset-0 h-full w-full object-cover"
-            src="/images/registerheaderoneimage.jpg"
-            alt=""
-          />
-        </div>
-      </div>
-
-      {/* <div className='bg-white shadow-lg rounded-lg p-0 lg:p-0 pb-12 mb-8'>
-        <div class="p-5">
-
-        <div className="container mx-auto px-10 mb-8">
-      
-        <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
-          <div className='lg:col-span-4 col-span-1'>
-         <h1 className='text-xl md:text-lg text-black bg-white/20 hover:backdrop-brightness-100 transition duration-500 rounded-lg'>Create a new account at Xidas Academy and start reading new books and XA guides or start selling your own books at Xidas Academy </h1>
+          <div className="absolute inset-0">
+            <img
+              className="h-full w-full object-cover"
+              src="/images/ResortDisplayTwo.jpg"
+              alt="The grand deliciae resorts"
+            />
+            <div className="absolute inset-0 bg-yellow-700 mix-blend-multiply opacity-50" />
           </div>
-          <div className='lg:col-span-8 col-span-1'>
-            <div className='lg:sticky relative col-8'>
-           
-            <form onSubmit={handleSubmit} className='w-full max-w-lg'>
-            <input
-              type="text"
-              className="form-control mb-4 p-4 appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white" id="grid-first-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter name"
-              required
-            />
-
-            <input
-              type="email"
-              className="form-control mb-4 p-4 appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter email"
-              required
-            />
-
-            <input
-              type="password"
-              className="form-control mb-4 p-4 appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-200 rounded leading-tight focus:outline-none focus:bg-white"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-              required
-            />
-
-            <button
-              type="submit"
-              className="transition duration-500  ease transform hover:-translate-y-1 inline-block bg-black text-lg font-medium rounded-lg text-white px-8 py-3 cursor-pointer"
-              disabled={!name || !email || !password || loading}
-            >
-              {loading ? <SyncOutlined spin /> : "Sign up"}
-            </button>
-          </form>
-            </div>
-          </div>
-        </div>
-      </div>
         </div>
       </div> */}
 

@@ -14,7 +14,7 @@ const Cards = ({ course }) => {
   const { published } = state;
 
   return (
-    <div className="">
+    <div className="bg-black">
  {/* { category.sold && (<div> This gets rendered when sold is true</div>)} */}
     {course.published == true &&  (<>
       <div className="group  w-full h-full relative p-4 border-r border-b border-gray-200 sm:p-6">

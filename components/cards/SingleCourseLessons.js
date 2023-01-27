@@ -46,7 +46,7 @@ const SingleCourseLessons = ({
 
   return (
  <>
-<div className="bg-white shadow overflow-hidden sm:rounded-lg bg-gray-100">
+<div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 overflow-hidden sm:rounded-lg bg-gray-100">
       <div className="px-4 py-5 sm:px-6">
         <h3 className="text-lg leading-6 font-medium text-gray-900">{name}</h3>
         {lessons && <p className="mt-1 max-w-2xl text-sm text-gray-500">Lesson's details: {lessons.length} Lessons total</p>}
@@ -54,7 +54,7 @@ const SingleCourseLessons = ({
       <div className="border-t border-gray-200 ">
      
         <dl>
-          <div className="bg-gray-50 px-4 py-5 sm:grid ">
+          <div className="bg-gray-100 px-4 py-5 sm:grid ">
           <div
       id="scrollableDiv"
       style={{
@@ -71,31 +71,7 @@ const SingleCourseLessons = ({
         endMessage={<Divider plain>It is all, nothing more 👻</Divider>}
         scrollableTarget="scrollableDiv"
       >
-        <List
-           dataSource={lessons}
-          renderItem={(item, index) => (
-            <Item>
-            <Item.Meta
-              avatar={<Avatar>{index + 1}</Avatar>}
-              title={item.title}
-            />
-          </Item>
-          )}
-        />
-      </InfiniteScroll>
-    </div>
-           
-          </div>
-        </dl>
-      </div>
-    </div>
-
-    {/* <div className="container">
-      <div className="row">
-        <div className="col lesson-list font-semibold">
-          {lessons && <h4 className="pt-3 pb-3">{lessons.length} Lessons</h4>}
-          <hr />
-          <List
+         <List
             itemLayout="horizontal"
             dataSource={lessons}
             renderItem={(item, index) => (
@@ -118,6 +94,20 @@ const SingleCourseLessons = ({
               </Item>
             )}
           />
+      </InfiniteScroll>
+    </div>
+           
+          </div>
+        </dl>
+      </div>
+    </div>
+{/* 
+    <div className="container">
+      <div className="row">
+        <div className="col lesson-list font-semibold">
+          {lessons && <h4 className="pt-3 pb-3">{lessons.length} Lessons</h4>}
+          <hr />
+         
         </div>
       </div>
     </div>  */}

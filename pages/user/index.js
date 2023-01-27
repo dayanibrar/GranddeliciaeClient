@@ -1,99 +1,107 @@
-import {useState, useEffect, useContext } from "react";
-import UserRoute from "../../components/routes/UserRoute";
-import { SyncOutlined } from "@ant-design/icons";
-import { Bookscard } from "../../components";
-import Head from "next/head";
-import { Fragment } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
-import {
-  BellIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxIcon,
-  MenuAlt2Icon,
-  UsersIcon,
-  XIcon,
-  UserIcon,
-  UserCircleIcon,
-  CogIcon
-} from '@heroicons/react/outline'
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context";
+import UserRoute from "../../components/routes/UserRoute";
+import axios from "axios";
+import Link from "next/link";
+import { SyncOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import Head from "next/head";
+import { Fragment } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import NoProducts from "../../components/user/noProducts";
-import { DocumentAddIcon } from "@heroicons/react/outline";
-import { styled } from '@mui/material/styles';
-import Badge from '@mui/material/Badge';
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
+import { styled } from "@mui/material/styles";
+// MUI Components
+import Badge from "@mui/material/Badge";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+// Icons
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import ArticleIcon from "@mui/icons-material/Article";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import CloseIcon from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import { toast } from "react-toastify";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    backgroundColor: '#44b700',
-    color: '#44b700',
+  "& .MuiBadge-badge": {
+    backgroundColor: "#44b700",
+    color: "#44b700",
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    '&::after': {
-      position: 'absolute',
+    "&::after": {
+      position: "absolute",
       top: 0,
       left: 0,
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      animation: 'ripple 1.2s infinite ease-in-out',
-      border: '1px solid currentColor',
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
       content: '""',
     },
   },
-  '@keyframes ripple': {
-    '0%': {
-      transform: 'scale(.8)',
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
       opacity: 1,
     },
-    '100%': {
-      transform: 'scale(2.4)',
+    "100%": {
+      transform: "scale(2.4)",
       opacity: 0,
     },
   },
 }));
 
-const SmallAvatar = styled(Avatar)(({ theme }) => ({
-  width: 22,
-  height: 22,
-  border: `2px solid ${theme.palette.background.paper}`,
-}));
-
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: UserIcon, current: true },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentAddIcon, current: false },
-  { name: 'Settings', href: '/user/settings', icon: CogIcon, current: false },
-]
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
-
+  { name: "Dashboard", href: "#", icon: AccountBoxIcon, current: true },
+];
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 const UserIndex = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
+  const {
+    state: { user },
+  } = useContext(Context);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    loadCourses();
+  }, []);
+
+  const loadCourses = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get("/api/user-courses");
+      setCourses(data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   // const [current, setCurrent] = useState("");
 
   const { state, dispatch } = useContext(Context);
-  const { user } = state;
-
   const router = useRouter();
 
   const current = new Date();
-  const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+  const date = `${current.getDate()}/${
+    current.getMonth() + 1
+  }/${current.getFullYear()}`;
 
+  const logout = async () => {
+    dispatch({ type: "LOGOUT" });
+    window.localStorage.removeItem("user");
+    const { data } = await axios.get("/api/logout");
+    toast.warning(data.message);
+    router.push("/login");
+  };
 
   return (
     <UserRoute>
@@ -103,96 +111,6 @@ const UserIndex = () => {
           className="d-flex justify-content-center display-1 text-danger p-5"
         />
       )}
-
-      <Head>
-        <title>User Profile Book Base</title>
-        {/* Meta Tags */}
-        <meta
-          name="description"
-          content="News and Blogs from Xidas Studios on latest and upcoming technologies, projects, services and more. Keep yourself updated on our page."
-        />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta
-          property="og:title"
-          content="Xidas Studios Press and Blogs"
-          key="title"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="57x57"
-          href="/apple-icon-57x57.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="60x60"
-          href="/apple-icon-60x60.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="72x72"
-          href="/apple-icon-72x72.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="76x76"
-          href="/apple-icon-76x76.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="114x114"
-          href="/apple-icon-114x114.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="120x120"
-          href="/apple-icon-120x120.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="144x144"
-          href="/apple-icon-144x144.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="152x152"
-          href="/apple-icon-152x152.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-icon-180x180.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="192x192"
-          href="/android-icon-192x192.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="96x96"
-          href="/favicon-96x96.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-        <meta name="theme-color" content="#ffffff" />
-      </Head>
-
-      {/* Dashboard */}
 
       <div>
         <>
@@ -240,7 +158,7 @@ const UserIndex = () => {
                           onClick={() => setSidebarOpen(false)}
                         >
                           <span className="sr-only">Close sidebar</span>
-                          <XIcon
+                          <CloseIcon
                             className="h-6 w-6 text-white"
                             aria-hidden="true"
                           />
@@ -263,13 +181,13 @@ const UserIndex = () => {
                             href={item.href}
                             className={classNames(
                               item.current
-                                ? "bg-indigo-800 text-white"
-                                : "text-indigo-100 hover:bg-indigo-600",
+                                ? "bg-yellow-800 text-white"
+                                : "text-indigo-100 hover:bg-yellow-600",
                               "group flex items-center px-2 py-2 text-base font-medium rounded-md"
                             )}
                           >
                             <item.icon
-                              className="mr-4 flex-shrink-0 h-6 w-6 text-indigo-300"
+                              className="mr-4 flex-shrink-0 h-6 w-6 text-gray-50"
                               aria-hidden="true"
                             />
                             {item.name}
@@ -288,12 +206,12 @@ const UserIndex = () => {
             {/* Static sidebar for desktop */}
             <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
               {/* Sidebar component, swap this element with another sidebar if you like */}
-              <div className="flex flex-col flex-grow pt-5 bg-indigo-700 overflow-y-auto">
+              <div className="flex flex-col flex-grow pt-5 bg-gray-900 overflow-y-auto">
                 <div className="flex items-center flex-shrink-0 px-4">
                   <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-300-mark-white-text.svg"
-                    alt="Workflow"
+                    className="h-16 rounded-lg w-auto"
+                    src="/images/granddeliciaelogo.png"
+                    alt="The Grand Deliciae"
                   />
                 </div>
                 <div className="mt-5 flex-1 flex flex-col">
@@ -304,13 +222,13 @@ const UserIndex = () => {
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? "bg-indigo-800 text-white hover:text-white"
-                            : "text-indigo-100 hover:bg-indigo-600 hover:text-white",
+                            ? "bg-gray-800 text-white hover:text-white"
+                            : "text-gray-100 hover:bg-gray-600 hover:text-white",
                           "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                         )}
                       >
                         <item.icon
-                          className="mr-3 flex-shrink-0 h-6 w-6 text-indigo-300"
+                          className="mr-3 flex-shrink-0 h-6 w-6 text-gray-300"
                           aria-hidden="true"
                         />
                         {item.name}
@@ -323,18 +241,29 @@ const UserIndex = () => {
                         href="/instructor"
                         className={classNames(
                           // 'text-indigo-100 hover:bg-indigo-600'
-                          "group text-white flex items-center px-2 py-2 text-sm font-medium rounded-md text-indigo-100 hover:bg-indigo-600 hover:text-white"
+                          "group text-white flex items-center px-2 py-2 text-sm font-medium rounded-md  hover:bg-gray-600 hover:text-white"
                         )}
                       >
                         <HomeIcon
-                          className="mr-3 flex-shrink-0 h-6 w-6 text-indigo-300"
+                          className="mr-3 flex-shrink-0 h-6 w-6 text-gray-300"
                           aria-hidden="true"
                         />
-                        Instructor Dashboard
+                        Admin Dashboard
                       </a>
                     )}
+
+<button
+                  type="button"
+                  className="group text-white flex items-center px-2 py-2 text-sm font-medium rounded-md  hover:bg-gray-600 hover:text-white"
+                  onClick={logout}
+                >
+                  Continue
+                  <LogoutIcon className="mr-3 flex-shrink-0 h-6 w-6 text-gray-300"
+                          aria-hidden="true"
+                        />
+                </button>
                   </nav>
-                  <div className="flex-shrink-0 flex border-t border-indigo-800 p-4">
+                  <div className="flex-shrink-0 flex border-t border-gray-800 p-4">
                     <a href="#" className="flex-shrink-0 group block">
                       <div className="flex items-center">
                         <div>
@@ -347,12 +276,11 @@ const UserIndex = () => {
                               }}
                               variant="dot"
                             >
-                              <Avatar
-                                alt={user && user.name}
-                               
-                              >
-                           {user && user.firstname.slice(0,1) + user.lastname.slice(0,1)}
-                                </Avatar>
+                              <Avatar alt={user && user.name}>
+                                {user &&
+                                  user.firstname.slice(0, 1) +
+                                    user.lastname.slice(0, 1)}
+                              </Avatar>
                             </StyledBadge>
                           </Stack>
                         </div>
@@ -360,8 +288,9 @@ const UserIndex = () => {
                           <p className="text-base font-medium text-white">
                             {user && user.name}
                           </p>
-                          <p className="text-sm cursor-default font-medium text-indigo-200 group-hover:text-white">
-                          Current date is {date}
+                         
+                          <p className="text-sm cursor-default font-medium text-gray-200 group-hover:text-white">
+                            Current date is {date}
                           </p>
                         </div>
                       </div>
@@ -374,11 +303,11 @@ const UserIndex = () => {
               <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
                 <button
                   type="button"
-                  className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+                  className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500 md:hidden"
                   onClick={() => setSidebarOpen(true)}
                 >
                   <span className="sr-only">Open sidebar</span>
-                  <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
+                  <MenuIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
                 <div className="flex-1 px-4 flex justify-between">
                   <div className="flex-1 flex">
@@ -433,15 +362,180 @@ const UserIndex = () => {
                             <div className="bg-white">
                               <div className="max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
                                 <div className="-mx-px grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
-                                  {user && user.courses.length > 1 && (
-                                    <Bookscard />
-                                  )}
+                                  <ul
+                                    role="list"
+                                    className="divide-y divide-gray-200 border-b border-gray-200 w-full"
+                                  >
+                                    {courses &&
+                                      courses.map((course) => (
+                                        <li
+                                          key={course._id}
+                                          className="relative py-5 pl-4 pr-6 hover:bg-gray-50 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6"
+                                        >
+                                          <div className="flex items-center justify-between space-x-4">
+                                            {/* Repo name and link */}
+                                            <div className="min-w-0 space-y-3">
+                                              <div className="flex items-center space-x-3">
+                                                <span
+                                                  className={classNames(
+                                                    course.published
+                                                      ? "bg-green-100"
+                                                      : "bg-gray-100",
+                                                    "h-4 w-4 rounded-full flex items-center justify-center"
+                                                  )}
+                                                  aria-hidden="true"
+                                                >
+                                                  <span
+                                                    className={classNames(
+                                                      course.published
+                                                        ? "bg-green-400"
+                                                        : "bg-red-400",
+                                                      "h-2 w-2 rounded-full"
+                                                    )}
+                                                  />
+                                                </span>
+
+                                                <h2 className="text-sm font-medium">
+                                                  <p href="/">
+                                                    <span
+                                                      className="absolute inset-0"
+                                                      aria-hidden="true"
+                                                    />
+                                                    {course.name}
+                                                    <span className="sr-only">
+                                                      {course.published ? (
+                                                        <>
+                                                          <p>Published</p>
+                                                        </>
+                                                      ) : (
+                                                        <>Not Published</>
+                                                      )}
+                                                    </span>
+                                                  </p>
+                                                </h2>
+                                              </div>
+                                              <div className="group relative flex items-center space-x-2.5">
+                                                <img
+                                                  className="h-16 w-50 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                                  viewBox="0 0 18 18"
+                                                  src={
+                                                    course.image
+                                                      ? course.image.Location
+                                                      : "/course.png"
+                                                  }
+                                                  aria-hidden="true"
+                                                />
+                                              </div>
+                                            </div>
+                                            <div className="sm:hidden">
+                                             
+                                            </div>
+                                            {/* Repo meta info */}
+                                            <div className="hidden flex-shrink-0 flex-col items-end space-y-3 sm:flex">
+                                              <p className="flex items-center space-x-4">
+                                                <a
+                                                  href={`/user/course/${course.slug}`}
+                                                  className="relative text-sm font-bold text-gray-500 hover:text-gray-900"
+                                                >
+                                                  View Service
+                                                </a>
+                                                {/* Add total customers here */}
+                                                {/* <button
+                              type="button"
+                              className="relative rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                              <span className="sr-only">
+                                {project.starred
+                                  ? "Add to favorites"
+                                  : "Remove from favorites"}
+                              </span>
+                              <StarIcon
+                                className={classNames(
+                                  project.starred
+                                    ? "text-yellow-300 hover:text-yellow-400"
+                                    : "text-gray-300 hover:text-gray-400",
+                                  "h-5 w-5"
+                                )}
+                                aria-hidden="true"
+                              />
+                            </button> */}
+                                              </p>
+                                              <p className="flex space-x-2 text-sm text-gray-500">
+                                                <span aria-hidden="true">
+                                                  &middot;
+                                                </span>
+                                                <span>{course.category}</span>
+                                                <span aria-hidden="true">
+                                                  &middot;
+                                                </span>
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </li>
+                                      ))}
+                                  </ul>
+
+                                  {/* {courses &&
+                                    courses.map((course) => (
+                                      <div
+                                        key={course._id}
+                                        className="media pt-2 pb-1"
+                                      >
+                                        <Avatar
+                                          size={80}
+                                          shape="square"
+                                          src={
+                                            course.image
+                                              ? course.image.Location
+                                              : "/course.png"
+                                          }
+                                        />
+
+                                        <div className="media-body pl-2">
+                                          <div className="row">
+                                            <div className="col">
+                                              <Link
+                                                href={`/user/course/${course.slug}`}
+                                                className="pointer"
+                                              >
+                                                <a>
+                                                  <h5 className="mt-2 text-primary">
+                                                    {course.name}
+                                                  </h5>
+                                                </a>
+                                              </Link>
+                                              <p style={{ marginTop: "-10px" }}>
+                                                {course.lessons.length} lessons
+                                              </p>
+                                              <p
+                                                className="text-muted"
+                                                style={{
+                                                  marginTop: "-15px",
+                                                  fontSize: "12px",
+                                                }}
+                                              >
+                                                By {course.instructor.name}
+                                              </p>
+                                            </div>
+                                            <div className="col-md-3 mt-3 text-center">
+                                              <Link
+                                                href={`/user/course/${course.slug}`}
+                                              >
+                                                <a>
+                                                  <PlayCircleOutlined className="h2 pointer text-primary" />
+                                                </a>
+                                              </Link>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))} */}
                                   {/* <Bookscard /> */}
                                 </div>
                                 <div className="-mx-px grid grid-cols-1 sm:mx-0 md:grid-cols-2 lg:grid-cols-1">
-                                  {user && user.courses.length < 0 && (
+                                  {/* {user && user.courses.length < 0 && (
                                     <NoProducts className="content-center" />
-                                  )}
+                                  )} */}
                                 </div>
                               </div>
                             </div>
@@ -461,19 +555,6 @@ const UserIndex = () => {
           </div>
         </>
       </div>
-
-      {/* <div className="container mx-auto px-10 mb-8">
-        <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
-          <div className='lg:col-span-8 col-span-1'>
-           
-          </div>
-          <div className='lg:col-span-4 col-span-1'>
-            <div className='lg:sticky relative col-8'>
-           
-            </div>
-          </div>
-        </div>
-      </div> */}
     </UserRoute>
   );
 };

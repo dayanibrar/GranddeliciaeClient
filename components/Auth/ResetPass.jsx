@@ -6,7 +6,6 @@ import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { Context } from "../../context";
 import { useRouter } from "next/router";
-import { LockClosedIcon } from "@heroicons/react/outline";
 const ResetPass = () => {
   // state
   const [email, setEmail] = useState("");
@@ -35,11 +34,11 @@ const ResetPass = () => {
     try {
       const { data } = await axios.post("/api/forgot-password", { email });
       setSuccess(true);
-      toast("Check your email for the secret code");
+      toast.warning("Check your email for the secret code");
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      toast(err.response.data);
+      toast.warning(err.response.data);
     }
   };
 
@@ -60,10 +59,10 @@ const ResetPass = () => {
       setNewPassword("");
       setnewName("");
       setLoading(false);
-      toast("Great! Now you can login with your new password");
+      toast.warning("Great! Now you can login with your new password");
     } catch (err) {
       setLoading(false);
-      toast(err.response.data);
+      toast.warning(err.response.data);
     }
   };
   return (
@@ -174,10 +173,7 @@ const ResetPass = () => {
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <LockClosedIcon
-                    className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                    aria-hidden="true"
-                  />
+
                 </span>
                 {loading ? <SyncOutlined spin /> : "Reset my password"}
               </button>

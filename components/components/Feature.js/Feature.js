@@ -37,10 +37,9 @@ export default function Feature() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="sm:text-center">
           <h2 className="text-lg font-semibold leading-8 text-yellow-600">Once in a lifetime experience</h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Luxury at Its Finest at the Grand Deliciae International 7-Star Resort</p>
+          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Luxury at Its Finest at the Grand Deliciae 7-Star Resort</p>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
-            Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis in
-            accusamus quisquam.
+          Experience ultimate luxury at our 7-star resort, boasting prime location, world-class amenities, and breathtaking accommodations.
           </p>
         </div>
 

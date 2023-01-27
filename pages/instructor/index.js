@@ -1,98 +1,150 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import InstructorRoute from "../../components/routes/InstructorRoute";
 import { Avatar, Tooltip } from "antd";
-import Link from "next/link";
-import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+// import Link from "next/link";
 import { InstructorBookcard } from "../../components";
-import NoProducts from "../../components/user/noProducts";
-import NoProjectCard from "../../components/becomeseller/NoProjectCard";
-import { Fragment } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
-import {
-  BellIcon,
-  ClockIcon,
-  CogIcon,
-  CreditCardIcon,
-  DocumentReportIcon,
-  HomeIcon,
-  MenuAlt1Icon,
-  QuestionMarkCircleIcon,
-  ScaleIcon,
-  ShieldCheckIcon,
-  UserGroupIcon,
-  XIcon,
-  DocumentAddIcon,
-  CalendarIcon,
-  ArchiveIcon,
-  SupportIcon,
-  InboxIcon
-} from '@heroicons/react/outline'
-import {
-  CashIcon,
-  CheckCircleIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  OfficeBuildingIcon,
-  SearchIcon,
-} from '@heroicons/react/solid'
+// import NoProducts from "../../components/user/noProducts";
+// import NoProjectCard from "../../components/becomeseller/NoProjectCard";
+// import { Fragment } from 'react'
+// import { Dialog, Menu, Transition } from '@headlessui/react'
+// import MenuIcon from '@mui/icons-material/Menu';
+// import HomeIcon from '@mui/icons-material/Home';
+// import CancelIcon from '@mui/icons-material/Cancel';
+// import CheckBoxIcon from '@mui/icons-material/CheckBox';
+// import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+
 import { useContext } from "react";
 import { Context } from "../../context";
-import {
-  DollarOutlined,
-  SettingOutlined,
-  SyncOutlined,
-} from "@ant-design/icons";
 import { stripeCurrencyFormatter } from "../../utils/helpers";
-
+import UserRoute from "../../components/routes/UserRoute";
+import InstructorRoute from "../../components/routes/InstructorRoute"
+import { Fragment } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import {
+  BarsArrowUpIcon,
+  CheckBadgeIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  MagnifyingGlassIcon,
+  RectangleStackIcon,
+  StarIcon,
+} from "@heroicons/react/20/solid";
+import {
+  Bars3CenterLeftIcon,
+  UserCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: 'Home', href: '#', icon: HomeIcon, current: true },
-  { name: 'History', href: '#', icon: ClockIcon, current: false },
-  { name: 'Balances', href: '#', icon: ScaleIcon, current: false },
-  { name: 'Customers', href: '#', icon: CreditCardIcon, current: false },
-  { name: 'Invoices', href: '#', icon: UserGroupIcon, current: false },
-  { name: 'Reports', href: '#', icon: DocumentReportIcon, current: false },
-]
-const secondaryNavigation = [
-  { name: 'Settings', href: '#', icon: CogIcon },
-  { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
-  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-]
-const thirdNavigation = [
-  { name: 'Documents', href: '#', icon: DocumentAddIcon },
-  { name: 'Planning', href: '#', icon: CalendarIcon },
-  { name: 'Manage Products', href: '#', icon: ArchiveIcon },
-  { name: 'Customer Support', href: '#', icon: SupportIcon },
-  { name: 'Inbox', href: '#', icon: InboxIcon },
-]
-const cards = [
-  { name: 'Account balance', href: '#', icon: ScaleIcon },
+  { name: "Home", href: "/", current: true },
+];
+const projects = [
+  {
+    name: "Workcation",
+    href: "#",
+    siteHref: "#",
+    repoHref: "#",
+    repo: "debbielewis/workcation",
+    tech: "Laravel",
+    lastDeploy: "3h ago",
+    location: "United states",
+    starred: true,
+    active: true,
+  },
+  // More projects...
+];
+const activityItems = [
+  {
+    project: "Workcation",
+    commit: "2d89f0c8",
+    environment: "production",
+    time: "1h",
+  },
+  {
+    project: "Workcation",
+    commit: "2d89f0c8",
+    environment: "production",
+    time: "1h",
+  },
+  {
+    project: "Workcation",
+    commit: "2d89f0c8",
+    environment: "production",
+    time: "1h",
+  },
+  {
+    project: "Workcation",
+    commit: "2d89f0c8",
+    environment: "production",
+    time: "1h",
+  },
+  {
+    project: "Workcation",
+    commit: "2d89f0c8",
+    environment: "production",
+    time: "1h",
+  },
+  {
+    project: "Workcation",
+    commit: "2d89f0c8",
+    environment: "production",
+    time: "1h",
+  },
+  {
+    project: "Workcation",
+    commit: "2d89f0c8",
+    environment: "production",
+    time: "1h",
+  },
+  {
+    project: "Workcation",
+    commit: "2d89f0c8",
+    environment: "production",
+    time: "1h",
+  },
+
   // More items...
-]
+];
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+const secondaryNavigation = [
+  { name: "Settings", href: "#" },
+  { name: "Help", href: "#" },
+  { name: "Privacy", href: "#" },
+];
+const thirdNavigation = [
+  { name: "Documents", href: "#" },
+  { name: "Planning", href: "#" },
+  { name: "Manage Products", href: "#" },
+  { name: "Customer Support", href: "#" },
+  { name: "Inbox", href: "#" },
+];
+
+const cards = [
+  { name: "Account balance", href: "#" },
+  // More items...
+];
 const transactions = [
   {
     id: 1,
-    name: 'Payment to Molly Sanders',
-    href: '#',
-    amount: '$20,000',
-    currency: 'USD',
-    status: 'success',
-    date: 'July 11, 2020',
-    datetime: '2020-07-11',
+    name: "Payment to Molly Sanders",
+    href: "#",
+    amount: "$20,000",
+    currency: "USD",
+    status: "success",
+    date: "July 11, 2020",
+    datetime: "2020-07-11",
   },
   // More transactions...
-]
+];
 const statusStyles = {
-  success: 'bg-green-100 text-green-800',
-  processing: 'bg-yellow-100 text-yellow-800',
-  failed: 'bg-gray-100 text-gray-800',
-}
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
+  success: "bg-green-100 text-green-800",
+  processing: "bg-yellow-100 text-yellow-800",
+  failed: "bg-gray-100 text-gray-800",
+};
 
 const InstructorIndex = () => {
   const [courses, setCourses] = useState([]);
@@ -108,7 +160,7 @@ const InstructorIndex = () => {
 
   const myStyle = { marginTop: "-15px", fontSize: "10px" };
 
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [balance, setBalance] = useState({ pending: [] });
   const [loading, setLoading] = useState(false);
@@ -137,528 +189,365 @@ const InstructorIndex = () => {
   const { state, dispatch } = useContext(Context);
 
   const { user } = state;
-  
+
   var data = [
-    [0, 4, "Good night"], 
-    [5, 11, "Good morning"],          //Store messages in an array
-    [12, 17, "Good afternoon"],
-    [18, 24, "Good night"]
-],
+      [0, 4, "Good night"],
+      [5, 11, "Good morning"], //Store messages in an array
+      [12, 17, "Good afternoon"],
+      [18, 24, "Good night"],
+    ],
     hr = new Date().getHours();
 
-    
   return (
-    <InstructorRoute>
-      <div className="min-h-full">
-        <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog
-            as="div"
-            className="fixed inset-0 flex z-40 lg:hidden"
-            onClose={setSidebarOpen}
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="transition-opacity ease-linear duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity ease-linear duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
-            </Transition.Child>
-            <Transition.Child
-              as={Fragment}
-              enter="transition ease-in-out duration-300 transform"
-              enterFrom="-translate-x-full"
-              enterTo="translate-x-0"
-              leave="transition ease-in-out duration-300 transform"
-              leaveFrom="translate-x-0"
-              leaveTo="-translate-x-full"
-            >
-              <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-cyan-700">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-in-out duration-300"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="ease-in-out duration-300"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <div className="absolute top-0 right-0 -mr-12 pt-2">
-                    <button
-                      type="button"
-                      className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                      onClick={() => setSidebarOpen(false)}
-                    >
-                      <span className="sr-only">Close sidebar</span>
-                      <XIcon
-                        className="h-6 w-6 text-white"
-                        aria-hidden="true"
-                      />
-                    </button>
+    <>
+      <InstructorRoute>
+        <div
+          className="fixed top-0 left-0 h-full w-1/2 bg-neutral-100"
+          aria-hidden="true"
+        />
+        <div
+          className="fixed top-0 right-0 h-full w-1/2 bg-gray-50"
+          aria-hidden="true"
+        />
+        <div className="relative flex min-h-full flex-col">
+          {/* Navbar */}
+          <Disclosure as="nav" className="flex-shrink-0 bg-black">
+            {({ open }) => (
+              <>
+                <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+                  <div className="relative flex h-16 items-center justify-between">
+                    {/* Logo section */}
+                    <div className="flex items-center px-2 lg:px-0 xl:w-64">
+                      <div className="flex-shrink-0">
+                        <img
+                          className="h-16 w-auto"
+                          src="/images/granddeliciaelogo.png"
+                          alt="The Grand Deliciae"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Search section */}
+                    <div className="flex flex-1 justify-center lg:justify-end">
+                      <div className="w-full px-2 lg:px-6">
+                        <div className="relative text-yellow-50 focus-within:text-gray-400">
+                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <UserCircleIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <div className="block w-full rounded-md border border-transparent bg-yellow-500 bg-opacity-50 py-2 pl-10 pr-3 leading-5 text-yellow-100 placeholder-yellow-200 focus:bg-white focus:text-gray-900 focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm">
+                            <p> Welcome back {user && user.name}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex lg:hidden">
+                      {/* Mobile menu button */}
+                      <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-yellow-600 p-2 text-yellow-400 hover:bg-yellow-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-yellow-600">
+                        <span className="sr-only">Open main menu</span>
+                        {open ? (
+                          <XMarkIcon
+                            className="block h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <Bars3CenterLeftIcon
+                            className="block h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </Disclosure.Button>
+                    </div>
+                    {/* Links section */}
+                    <div className="hidden lg:block lg:w-80">
+                      <div className="flex items-center justify-end">
+
+                        {/* Profile dropdown */}
+                        <Menu as="div" className="relative ml-4 flex-shrink-0">
+                          <div>
+                         
+                              <span className="sr-only">Open user menu</span>
+                              <div className="h-8 w-8 rounded-full">
+                                <a
+                                  href="/user/"
+                                  className="lg:ml-8 md:ml-2 sm:ml-2 inline-flex items-center justify-center rounded-sm border border-white bg-black px-4 py-2 text-base font-medium text-white hover:text-white shadow-sm hover:bg-black"
+                                >
+                                  {user &&
+                                    user.firstname.substring(0, 1) +
+                                      user.lastname.substring(0, 1)}
+                                </a>
+                              </div>
+
+                          </div>
+                        </Menu>
+                      </div>
+                    </div>
                   </div>
-                </Transition.Child>
-                <div className="flex-shrink-0 flex items-center px-4">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/easywire-logo-cyan-300-mark-white-text.svg"
-                    alt="Easywire logo"
-                  />
                 </div>
-                <nav
-                  className="mt-5 flex-shrink-0 h-full divide-y divide-cyan-800 overflow-y-auto"
-                  aria-label="Sidebar"
-                >
-                  <div className="px-2 space-y-1">
+
+                <Disclosure.Panel className="lg:hidden">
+                  <div className="space-y-1 px-2 pt-2 pb-3">
                     {navigation.map((item) => (
-                      <a
+                      <Disclosure.Button
                         key={item.name}
+                        as="a"
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? "bg-cyan-800 text-white"
-                            : "text-cyan-100 hover:text-white hover:bg-cyan-600",
-                          "group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                            ? "text-white bg-yellow-800"
+                            : "text-yellow-200 hover:text-yellow-100 hover:bg-yellow-600",
+                          "block px-3 py-2 rounded-md text-base font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}
                       >
-                        <item.icon
-                          className="mr-4 flex-shrink-0 h-6 w-6 text-cyan-200"
-                          aria-hidden="true"
-                        />
                         {item.name}
-                      </a>
+                      </Disclosure.Button>
                     ))}
                   </div>
-                  <div className="mt-6 pt-6">
-                    <div className="px-2 space-y-1">
-                      {secondaryNavigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className="group flex items-center px-2 py-2 text-base font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600"
-                        >
-                          <item.icon
-                            className="mr-4 h-6 w-6 text-cyan-200"
+                  <div className="border-t border-yellow-800 pt-4 pb-3">
+                    <div className="space-y-1 px-2">
+                   
+                    </div>
+                  </div>
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+
+          {/* 3 column wrapper */}
+          <div className="mx-auto w-full max-w-7xl flex-grow lg:flex xl:px-8">
+            {/* Left sidebar & main wrapper */}
+            <div className="min-w-0 flex-1 bg-neutral-100 xl:flex">
+              {/* Account profile */}
+              <div className="bg-neutral-100 xl:w-64 xl:flex-shrink-0 xl:border-r xl:border-gray-200">
+                <div className="py-6 pl-4 pr-6 sm:pl-6 lg:pl-8 xl:pl-0">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1 space-y-8">
+                      <div className="space-y-8 sm:flex sm:items-center sm:justify-between sm:space-y-0 xl:block xl:space-y-8">
+                        {/* Profile */}
+                        <div className="flex items-center space-x-3">
+                          <div className="h-12 w-100 flex-shrink-0">
+                          <p
+                                  className=" md:ml-2 sm:ml-2 inline-flex items-center justify-center rounded-sm border border-white bg-neutral-200 px-4 py-2 text-base font-medium text-black hover:text-white shadow-sm hover:bg-black"
+                                >
+                                  {user &&
+                                    user.firstname + " " +
+                                      user.lastname} <br /> 
+
+                                     
+                                </p>
+                          </div>
+                          {/* <div className="space-y-1">
+                            
+                              <span className="text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                                {user && user.name}
+                              </span>
+                          </div> */}
+                        </div>
+                        {/* Action buttons */}
+                        <div className="flex flex-col sm:flex-row xl:flex-col">
+                          <button
+                            type="button"
+                            className="inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 xl:w-full"
+                          >
+                            New Project
+                          </button>
+                          <button
+                            type="button"
+                            className="mt-3 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 xl:ml-0 xl:mt-3 xl:w-full"
+                          >
+                            Contact Support
+                          </button>
+                        </div>
+                      </div>
+                      {/* Meta info */}
+                      <div className="flex flex-col space-y-6 sm:flex-row sm:space-y-0 sm:space-x-8 xl:flex-col xl:space-x-0 xl:space-y-6">
+                        <div className="flex items-center space-x-2">
+                          <CheckBadgeIcon
+                            className="h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="mt-6 pt-6">
-                    <div className="px-2 space-y-1">
-                      {thirdNavigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className="group flex items-center px-2 py-2 text-base font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600"
-                        >
-                          <item.icon
-                            className="mr-4 h-6 w-6 text-cyan-200"
+                          <span className="text-sm font-medium text-gray-500">
+                           Account verified
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RectangleStackIcon
+                            className="h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </nav>
-              </div>
-            </Transition.Child>
-            <div className="flex-shrink-0 w-14" aria-hidden="true">
-              {/* Dummy element to force sidebar to shrink to fit close icon */}
-            </div>
-          </Dialog>
-        </Transition.Root>
-
-        {/* Static sidebar for desktop */}
-        <div className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-col flex-grow bg-cyan-700 pt-5 pb-4 overflow-y-auto">
-            <div className="flex items-center flex-shrink-0 px-4">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/easywire-logo-cyan-300-mark-white-text.svg"
-                alt="Easywire logo"
-              />
-            </div>
-            <nav
-              className="mt-5 flex-1 flex flex-col divide-y divide-cyan-800 overflow-y-auto"
-              aria-label="Sidebar"
-            >
-              <div className="px-2 space-y-1">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className={classNames(
-                      item.current
-                        ? "bg-cyan-800 text-white"
-                        : "text-cyan-100 hover:text-white hover:bg-cyan-600",
-                      "group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md"
-                    )}
-                    aria-current={item.current ? "page" : undefined}
-                  >
-                    <item.icon
-                      className="mr-4 flex-shrink-0 h-6 w-6 text-cyan-200"
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </a>
-                ))}
-              </div>
-              <div className="mt-6 pt-6">
-                <div className="px-2 space-y-1">
-                  {secondaryNavigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600"
-                    >
-                      <item.icon
-                        className="mr-4 h-6 w-6 text-cyan-200"
-                        aria-hidden="true"
-                      />
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-6 pt-6">
-                <div className="px-2 space-y-1">
-                  {thirdNavigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md text-cyan-100 hover:text-white hover:bg-cyan-600"
-                    >
-                      <item.icon
-                        className="mr-4 h-6 w-6 text-cyan-200"
-                        aria-hidden="true"
-                      />
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </nav>
-          </div>
-        </div>
-
-        <div className="lg:pl-64 flex flex-col flex-1">
-          <div className="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:border-none">
-            <button
-              type="button"
-              className="px-4 border-r border-gray-200 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <span className="sr-only">Open sidebar</span>
-              <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
-            </button>
-            {/* Search bar */}
-            <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-              <div className="flex-1 flex">
-                <form className="w-full flex md:ml-0" action="#" method="GET">
-                  <label htmlFor="search-field" className="sr-only">
-                    Search
-                  </label>
-                  <div className="relative w-full text-gray-400 focus-within:text-gray-600">
-                    <div
-                      className="absolute inset-y-0 left-0 flex items-center pointer-events-none"
-                      aria-hidden="true"
-                    >
-                      {/* <SearchIcon className="h-5 w-5" aria-hidden="true" /> */}
-                    </div>
-                    <input
-                      id="search-field"
-                      name="search-field"
-                      className="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
-                      // placeholder="Search transactions"
-                      type="search"
-                      disabled
-                    />
-                  </div>
-                </form>
-              </div>
-              <div className="ml-4 flex items-center md:ml-6">
-                <a
-                  type="button"
-                  href="/"
-                  className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <HomeIcon className="h-6 w-6" aria-hidden="true" />
-                </a>
-
-                {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
-                  <div>
-                    <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
-                      <Avatar alt={user && user.name}>
-                        {user && user.name.slice(0, 1)}
-                      </Avatar>
-                      <span className="hidden ml-3 text-gray-700 text-sm font-medium lg:block">
-                        <span className="sr-only">Open user menu for </span>
-                        {user && user.name}
-                      </span>
-                      <ChevronDownIcon
-                        className="hidden flex-shrink-0 ml-1 h-5 w-5 text-gray-400 lg:block"
-                        aria-hidden="true"
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Main Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
-              </div>
-            </div>
-          </div>
-          <main className="flex-1 pb-8">
-            {/* Page header */}
-            <div className="bg-white shadow">
-              <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-                <div className="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
-                  <div className="flex-1 min-w-0">
-                    {/* Profile */}
-                    <div className="flex items-center">
-                      <Avatar
-                        alt={user && user.name}
-                        className="hidden h-16 w-16 text-3xl p-3 rounded-full sm:block"
-                      >
-                        {user && user.name.slice(0, 1)}
-                      </Avatar>
-                      {/* <img
-                        className="hidden h-16 w-16 rounded-full sm:block"
-                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
-                        alt=""
-                      /> */}
-                      <div>
-                        <div className="flex items-center">
-                          <Avatar
-                            alt={user && user.name}
-                            className="h-16 w-16 text-3xl p-3 rounded-full sm:hidden"
-                          >
-                            {user && user.name.slice(0, 1)}
-                          </Avatar>
-
-                          <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                            Welcome, {user && user.name}
-                          </h1>
-                        </div>
-                        <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
-                          <dt className="sr-only">Company</dt>
-                          <dd className="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6">
-                            <OfficeBuildingIcon
-                              className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                            Business name here
-                          </dd>
-                          <dt className="sr-only">Account status</dt>
-                          <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
-                            <CheckCircleIcon
-                              className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                              aria-hidden="true"
-                            />
-                            Verified account
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                    >
-                      New project
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-lg leading-6 font-medium text-gray-900">
-                  Overview
-                </h2>
-                <div className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {/* Card */}
-                  {cards.map((card) => (
-                    <div
-                      key={card.name}
-                      className="bg-white overflow-hidden shadow rounded-lg"
-                    >
-                      <div className="p-5">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0">
-                            <card.icon
-                              className="h-6 w-6 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </div>
-                          <div className="ml-5 w-0 flex-1">
-                            <dl>
-                              <dt className="text-sm font-medium text-gray-500 truncate">
-                                {card.name}
-                              </dt>
-                              <dd>
-                                <div className="text-lg font-medium text-gray-900">
-                                  {balance.pending &&
-                                    balance.pending.map((bp, i) => (
-                                      <span key={i}>
-                                        {stripeCurrencyFormatter(bp)}
-                                      </span>
-                                    ))}
-                                </div>
-                              </dd>
-                            </dl>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="bg-gray-50 px-5 py-3">
-                        <div className="text-sm">
-                          <a
-                            href={card.href}
-                            className="font-medium text-cyan-700 hover:text-cyan-900"
-                          >
-                            Settings
-                          </a>
+                          {/* Add number of services listed here */}
+                         
                         </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
 
-              <h2 className="max-w-6xl mx-auto mt-8 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8">
-                Recent activity
-              </h2>
-
-              {/* Activity list (smallest breakpoint only) */}
-              {/* <div className="shadow sm:hidden">
+              {/* Projects List */}
+              <div className="bg-neutral-100  lg:min-w-0 lg:flex-1">
+                <div className="border-b border-t border-neutral-900 pl-4 pr-6 pt-4 pb-4 sm:pl-6 lg:pl-8 xl:border-t-0 xl:pl-6 xl:pt-6">
+                  <div className="flex items-center">
+                    <h1 className="flex-1 text-lg font-medium">Services</h1>
+                  </div>
+                </div>
                 <ul
                   role="list"
-                  className="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden"
+                  className="divide-y divide-gray-200 h-96 border-b border-gray-200"
                 >
-                  {transactions.map((transaction) => (
-                    <li key={transaction.id}>
-                      <a
-                        href={transaction.href}
-                        className="block px-4 py-4 bg-white hover:bg-gray-50"
-                      >
-                        <span className="flex items-center space-x-4">
-                          <span className="flex-1 flex space-x-2 truncate">
-                            <CashIcon
-                              className="flex-shrink-0 h-5 w-5 text-gray-400"
+                  {courses &&
+          courses.map((course) => (
+                    <li
+                      key={course._id}
+                      className="relative py-5 pl-4 pr-6 hover:bg-gray-50 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6"
+                    >
+                      <div className="flex items-center justify-between space-x-4">
+                        {/* Repo name and link */}
+                        <div className="min-w-0 space-y-3">
+                          <div className="flex items-center space-x-3">
+                            
+                            <span
+                              className={classNames(
+                                course.published ? "bg-green-100" : "bg-gray-100",
+                                "h-4 w-4 rounded-full flex items-center justify-center"
+                              )}
+                              aria-hidden="true"
+                            >
+                              <span
+                                className={classNames(
+                                  course.published
+                                    ? "bg-green-400"
+                                    : "bg-red-400",
+                                  "h-2 w-2 rounded-full"
+                                )}
+                              />
+                            </span>
+
+                            <h2 className="text-sm font-medium">
+                              <p href="/">
+                                <span
+                                  className="absolute inset-0"
+                                  aria-hidden="true"
+                                />
+                               {course.name}
+                                <span className="sr-only">
+                                {course.published ? (<><p>Published</p></>):(<>Not Published</>)}
+                                </span>
+                              </p>
+                            </h2>
+                          </div>
+                          <div
+                           
+                            className="group relative flex items-center space-x-2.5"
+                          >
+                            <img
+                              className="h-16 w-50 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                              viewBox="0 0 18 18"
+                              src={
+                                course.image ? course.image.Location : "/course.png"
+                              }
                               aria-hidden="true"
                             />
-                            <span className="flex flex-col text-gray-500 text-sm truncate">
-                              <span className="truncate">
-                                {transaction.name}
-                              </span>
-                              <span>
-                                <span className="text-gray-900 font-medium">
-                                  {transaction.amount}
-                                </span>{" "}
-                                {transaction.currency}
-                              </span>
-                              <time dateTime={transaction.datetime}>
-                                {transaction.date}
-                              </time>
-                            </span>
-                          </span>
+                          </div>
+                        </div>
+                        <div className="sm:hidden">
                           <ChevronRightIcon
-                            className="flex-shrink-0 h-5 w-5 text-gray-400"
+                            className="h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
-                        </span>
-                      </a>
+                        </div>
+                        {/* Repo meta info */}
+                        <div className="hidden flex-shrink-0 flex-col items-end space-y-3 sm:flex">
+                          <p className="flex items-center space-x-4">
+                            <a
+                              href={`/instructor/course/view/${course.slug}`}
+                              className="relative text-sm font-bold text-gray-500 hover:text-gray-900"
+                            >
+                              View Service
+                            </a>
+                            {/* Add total customers here */}
+                            {/* <button
+                              type="button"
+                              className="relative rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                            >
+                              <span className="sr-only">
+                                {project.starred
+                                  ? "Add to favorites"
+                                  : "Remove from favorites"}
+                              </span>
+                              <StarIcon
+                                className={classNames(
+                                  project.starred
+                                    ? "text-yellow-300 hover:text-yellow-400"
+                                    : "text-gray-300 hover:text-gray-400",
+                                  "h-5 w-5"
+                                )}
+                                aria-hidden="true"
+                              />
+                            </button> */}
+                          </p>
+                          <p className="flex space-x-2 text-sm text-gray-500">
+                            <span aria-hidden="true">&middot;</span>
+                            <span>{course.category}</span>
+                            <span aria-hidden="true">&middot;</span>
+                          </p>
+                        </div>
+                      </div>
                     </li>
                   ))}
                 </ul>
-
-                <nav
-                  className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200"
-                  aria-label="Pagination"
-                >
-                  <div className="flex-1 flex justify-between">
-                    <a
-                      href="#"
-                      className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500"
-                    >
-                      Previous
-                    </a>
-                    <a
-                      href="#"
-                      className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500"
-                    >
-                      Next
-                    </a>
-                  </div>
-                </nav>
-              </div> */}
-
-              {/* Activity table (small breakpoint and up) */}
-              <div className="">
-                <div className="max-w-6xl mx-auto">
-                  <div className="flex flex-col mt-2">
-                  <div className="">
-                      <div className="bg-white">
-                        <div className="max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8">
-                          <div className="-mx-px grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
-                            {courses && courses.length >= 1 && <InstructorBookcard />}
-                          </div>
-                          <div className="-mx-px grid grid-cols-1 sm:mx-0 md:grid-cols-2 lg:grid-cols-1">
-                            {courses && courses.length < 0 && (
-                              <NoProjectCard/>
-                            )}
-                            {courses && courses.length <= 0 && (
-                              <NoProjectCard/>
-                            )}
-                      
+              </div>
+            </div>
+            {/* Activity feed */}
+            <div className="bg-gray-50 pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0">
+              <div className="pl-6 lg:w-80">
+                <div className="pt-6 pb-2">
+                  <h2 className="text-sm font-semibold">Activity</h2>
+                </div>
+                <div>
+                  {/* <ul role="list" className="divide-y divide-gray-200">
+                    {activityItems.map((item) => (
+                      <li key={item.commit} className="py-4">
+                        <div className="flex space-x-3">
+                          <img
+                            className="h-6 w-6 rounded-full"
+                            src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&h=256&q=80"
+                            alt=""
+                          />
+                          <div className="flex-1 space-y-1">
+                            <div className="flex items-center justify-between">
+                              <h3 className="text-sm font-medium">You</h3>
+                              <p className="text-sm text-gray-500">
+                                {item.time}
+                              </p>
+                            </div>
+                            <p className="text-sm text-gray-500">
+                              Deployed {item.project} ({item.commit} in master)
+                              to {item.environment}
+                            </p>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                      </li>
+                    ))}
+                  </ul> */}
+                  <div className="border-t border-gray-200 py-4 text-sm">
+                    <a
+                      href="#"
+                      className="font-semibold text-yellow-600 hover:text-yellow-900"
+                    >
+                      View all activity
+                      <span aria-hidden="true"> &rarr;</span>
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
-          </main>
+          </div>
         </div>
-      </div>
-
-      {/* <h1 className="jumbotron text-center square">Instructor Dashboard</h1>
+        {/* <h1 className="jumbotron text-center square">Instructor Dashboard</h1>
       <div className="container mx-auto px-10 mb-8">
         <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
         <div className='lg:col-span-8 col-span-1'>
@@ -669,10 +558,10 @@ const InstructorIndex = () => {
             </div>
           </div>
         </div>
-      </div>       */}
-      {/* <pre>{JSON.stringify(courses, null, 4)}</pre> */}
+      </div>       
+     
 
-      {/* {courses &&
+      {courses &&
         courses.map((course) => (
           <>
             <div className="media pt-2">
@@ -726,8 +615,11 @@ const InstructorIndex = () => {
               </div>
             </div>
           </>
+
+          
         ))} */}
-    </InstructorRoute>
+      </InstructorRoute>
+    </>
   );
 };
 

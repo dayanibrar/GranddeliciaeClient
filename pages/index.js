@@ -1,51 +1,51 @@
+import { useState, useEffect } from "react";
 import axios from "axios";
-import Head from "next/head";
-import { useContext, useEffect, useState } from "react";
-import * as Realm from "realm-web";
-import { Context } from "../context";
+import CourseCard from "../components/cards/CourseCard";
+
+// Components
 import NavbarMain from "../components/components/Navbar";
 import Header from "../components/components/header/Header";
 import MainDisplay from "../components/components/background/MainDisplay";
 import Feature from "../components/components/Feature.js/Feature";
 import OurRooms from "../components/components/Room/OurRooms";
+import LearnMore from "../components/components/about/LearnMore";
+import NewsLetter from "../components/components/NewsLetter/NewsLetter";
+import Testimonials from "../components/components/Reviews/Testimonial";
+import Faqs from "../components/components/Faqs/FrequentlyAskedQuestions";
+import Footer from "../components/components/Footers/Footer";
 
-const Index = ({ course }) => {
-  const [courses, setProducts] = useState([]);
-  const { searchBook, setSearchBook, state, dispatch } = useContext(Context);
-  const { published } = state;
+const Index = ({ courses }) => {
+  // const [courses, setCourses] = useState([]);
 
-  useEffect(async () => {
-    // add your Realm App Id to the .env.local file
-    const REALM_APP_ID = process.env.NEXT_PUBLIC_REALM_APP_ID;
-    const app = new Realm.App({ id: REALM_APP_ID });
-    const credentials = Realm.Credentials.anonymous();
-    try {
-      const user = await app.logIn(credentials);
-      const allProducts = await user.functions.getAllProducts();
-      setProducts(() => allProducts);
-      setSearchBook(() => allProducts);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const fetchCourses = async () => {
+  //     const { data } = await axios.get("/api/courses");
+  //     setCourses(data);
+  //   };
+  //   fetchCourses();
+  // }, []);
 
   return (
     <>
-      <Head>
-        <title>Grand Deliciae Resorts</title>
-        {/* Meta Tags */}
-        <meta
-          name="description"
-          content="Escape to Grand Deliciae: A luxurious getaway for the senses"
-        />
-      </Head>
-
       <div className="bg-black">
-        <NavbarMain />
-        <Header />
+          <NavbarMain />
+          <Header />
         <MainDisplay />
         <Feature />
         <OurRooms/>
+        {courses.map((course) => (
+            <div key={course._id} className="col-md-4">
+              <CourseCard course={course} />
+            </div>
+          ))}
+        <LearnMore />
+        <Testimonials />
+        <Faqs />
+        <NewsLetter />
+        <Footer />
+
+          
+
       </div>
     </>
   );
